@@ -19,7 +19,17 @@ public class BaseEntity : MonoBehaviour
     {
         if(playerOwner == GameManager.gm.currentTeam)
         {
-            gameObject.layer = LayerMask.NameToLayer("Selectable");
+            int collideLayer = LayerMask.NameToLayer("Selectable");
+            gameObject.layer = collideLayer;
+            // turn all of the children to be raycastable (2 layers)
+            foreach (Transform child in gameObject.transform)
+            {
+                child.gameObject.layer = collideLayer;
+                foreach (Transform child2 in child)
+                {
+                    child2.gameObject.layer = collideLayer;
+                }
+            }
         }
     }
 

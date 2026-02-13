@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         Vector2 scrolling = mouseScrollAct.action.ReadValue<Vector2>();
         // IDK
         if(scrolling.y > 0.01 || scrolling.y < -0.01){
-            scrollSet -= scrolling.y;
+            scrollSet -= scrolling.y * 2;
             if(scrollSet < 5)scrollSet = 5;
             if(scrollSet > 50)scrollSet = 50;
             move -= Vector3.up * (transform.position.y - scrollSet);
