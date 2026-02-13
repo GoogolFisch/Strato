@@ -3,6 +3,7 @@ using System.Transactions;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.InputSystem;
+using System.Runtime.CompilerServices;
 
 public class PlayerController : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class PlayerController : MonoBehaviour
             timeOffset = 0;
         }
         if(mouseDown <= 0.5 && oldMouseDown && timeOffset < 0.2){
-            Debug.Log("Hello single click!");
+            TrySelectEntity();
         }
         if(mouseDown > 0.5){
             Vector2 minput = mouseMoveAct.action.ReadValue<Vector2>();
@@ -70,6 +71,21 @@ public class PlayerController : MonoBehaviour
         transform.position += move;
         timeOffset += Time.deltaTime;
         oldMouseDown = (mouseDown > 0.5);
+    }
+    void TrySelectEntity()
+    {
+        int count = 9;
+        RaycastHit _hit;
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        //Physics.Raycast(origin, direction, out hit, distance, layerMask);
+        Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
+        int layerMask = LayerMask.GetMask("Selectable");
+        while(count-- > 0 && Physics.Raycast(rayCast,out _hit,99,layerMask)){
+        //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
+            GameObject item = _hit.transform.gameObject;
+            //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            Debug.Log(item);
+        }
     }
 
 }

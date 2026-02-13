@@ -97,3 +97,9 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# don't send crash recovery
+/[Aa]ssets/_[Rr]ecovery*
+
+# others
+*ung.txt

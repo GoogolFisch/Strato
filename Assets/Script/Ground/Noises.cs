@@ -21,6 +21,8 @@ public class Noises
 
     public float GetHeight(float px,float py){
         float rx,ry;
+        px *= 0.3f;
+        py *= 0.3f;
         rotate(px,py,out rx,out ry,Mathf.PI * 0.33f);
         float akku = 0;
         akku += Mathf.PerlinNoise(pushIn(px,0),pushIn(py,16));

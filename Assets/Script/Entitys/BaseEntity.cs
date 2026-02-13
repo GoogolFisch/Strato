@@ -17,7 +17,10 @@ public class BaseEntity : MonoBehaviour
     }
     void Start()
     {
-        
+        if(playerOwner == GameManager.gm.currentTeam)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Selectable");
+        }
     }
 
     // Update is called once per frame

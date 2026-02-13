@@ -570,8 +570,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   playerCount: 5
-  baseRadius: 32
-  homeBase: {fileID: 315190948086151662, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
+  baseRadius: 48
+  homeBase: {fileID: 7224408860580563439, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
 --- !u!1 &1304352202
 GameObject:
   m_ObjectHideFlags: 0
