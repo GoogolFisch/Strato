@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public InputActionReference mouseDownAct; // ???
     public InputActionReference mouseMoveAct; // ???
     public InputActionReference mouseScrollAct; // ???
+    public BaseEntity selectedEnt;
     //
     //UnityEvent m_MyEvent;
     void Start()
@@ -85,6 +86,9 @@ public class PlayerController : MonoBehaviour
             GameObject item = _hit.transform.gameObject;
             //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
             Debug.Log(item);
+            selectedEnt = null;
+            //if(_hit.transform.parent.gameObject)
+            selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
         }
     }
 
