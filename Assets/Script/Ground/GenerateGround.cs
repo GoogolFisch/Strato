@@ -20,7 +20,8 @@ public class GenerateGround : MonoBehaviour
         float reposXY = GROUND_TILES * planeScale;
         for(int px = 0;px < GROUND_TILES;px++){
             for(int py = 0;py < GROUND_TILES;py++){
-                Instantiate(planeTiles,new Vector3(planeScale * px * 2 - reposXY,0,planeScale * py * 2 - reposXY),Quaternion.identity,transform);
+                Vector3 vpos = new Vector3(planeScale * px * 2 - reposXY,0,planeScale * py * 2 - reposXY);
+                Instantiate(planeTiles,vpos,Quaternion.identity,transform);
             }
         }
     }

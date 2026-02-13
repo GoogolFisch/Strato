@@ -1,4 +1,4 @@
-# Real time strategie Spiel
+# Real time strategie Game
 
 - there are many players(1v1)
 - each one can only maipulate ones owne troups

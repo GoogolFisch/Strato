@@ -61,44 +61,30 @@ public class PlaneGen : MonoBehaviour
         Vector2[] uvs = new Vector2[pointOffset];
         int[] tris = new int[triOffset];
         Vector3 vec;
+        Noises noise = GroundState.groundSetting.nss;
         for (int overX = 0; overX < edgeLength + 1; overX++)
         {
             for (int overY = 0; overY < edgeLength + 1; overY++, index++)
             {
                 // xy up
+                float deltaXY = 0.001f;
+                float h0 = noise.GetHeight(overX * planeScale * factor + transform.position.x,overY * planeScale * factor + transform.position.z);
+                float h1 = noise.GetHeight(overX * planeScale * factor + transform.position.x + deltaXY,overY * planeScale * factor + transform.position.z);
+                float h2 = noise.GetHeight(overX * planeScale * factor + transform.position.x,overY * planeScale * factor + transform.position.z + deltaXY);
+                //float h0 = Mathf.PerlinNoise(overX * planeScale * factor + transform.position.x,overY * planeScale * factor + transform.position.z);
+                //float h1 = Mathf.PerlinNoise(overX * planeScale * factor + transform.position.x + deltaXY,overY * planeScale * factor + transform.position.z);
+                //float h2 = Mathf.PerlinNoise(overX * planeScale * factor + transform.position.x,overY * planeScale * factor + transform.position.z + deltaXY);
                 vec = new Vector3((overX * factor - 1) * planeScale,
-                                Mathf.PerlinNoise(overX * planeScale * factor + transform.position.x,overY * planeScale * factor + transform.position.z),
+                                h0,
                                 (overY * factor - 1) * planeScale);
-                normals[index] = Vector3.zero;
+                normals[index] = -Vector3.Cross(new Vector3(deltaXY,h1 - h0,0),new Vector3(0,h2 - h0,deltaXY));
+                //normals[index].Normalize();
                 uvs[index] = new Vector2(overX * factor, overY * factor);
                 points[index] = vec;
                 colors[index] = new Color(1f,1f,1f);
             }
         }
-        int index0,index1,index2,index3;
-        for (int overX = 1; overX < edgeLength + 1; overX++)
-        {
-            for (int overY = 1; overY < edgeLength + 1; overY++, index++)
-            {
-                index0 = (overY - 1) + (overX - 1) * (edgeLength + 1);
-                index1 =  overY      + (overX - 1) * (edgeLength + 1);
-                index2 = (overY - 1) +  overX      * (edgeLength + 1);
-                index3 =  overY      +  overX      * (edgeLength + 1);
-                normals[index0] += Vector3.Cross(points[index0] - points[index1],points[index0] - points[index2]);
-                normals[index1] -= Vector3.Cross(points[index1] - points[index0],points[index1] - points[index3]);
-                normals[index2] -= Vector3.Cross(points[index2] - points[index3],points[index2] - points[index0]);
-                normals[index3] += Vector3.Cross(points[index3] - points[index2],points[index3] - points[index1]);
-            }
-        }
 
-        for (int overX = 0; overX < edgeLength + 1; overX++)
-        {
-            for (int overY = 0; overY < edgeLength + 1; overY++, index++)
-            {
-                index =  overY      +  overX      * (edgeLength + 1);
-                normals[index].Normalize();
-            }
-        }
         // triangle creation
         index = 0;
         int overIndex = 0;

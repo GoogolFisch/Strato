@@ -4,7 +4,7 @@ using UnityEngine;
 public class GroundState : MonoBehaviour
 {
     public static GroundState groundSetting;
-    Noises nss;
+    public Noises nss;
     Noises GetNoise(){
         if(nss == null){
             nss = new Noises();
