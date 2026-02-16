@@ -5,8 +5,9 @@ public class BaseEntity : MonoBehaviour
 
     public long id = 0;
     public float health;
+    public float baseHealth;
     public int playerOwner;
-    public Vector3 targetPosition;
+    //public Vector3 targetPosition;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -14,17 +15,29 @@ public class BaseEntity : MonoBehaviour
         {
             id = Random.Range(0,0x10000) + (Random.Range(0,0x10000) <<16);
         }
+        EntityManager.em.enityList.Add(id,this);
     }
-    void Start()
+    internal void Start()
     {
         if(playerOwner == GameManager.gm.currentTeam)
         {
-            gameObject.layer = LayerMask.NameToLayer("Selectable");
+            //gameObject.layer = LayerMask.NameToLayer("Selectable");
+            int collideLayer = LayerMask.NameToLayer("Selectable");
+            gameObject.layer = collideLayer;
+            // turn all of the children to be raycastable (2 layers)
+            foreach (Transform child in gameObject.transform)
+            {
+                child.gameObject.layer = collideLayer;
+                foreach (Transform child2 in child)
+                {
+                    child2.gameObject.layer = collideLayer;
+                }
+            }
         }
     }
 
     // Update is called once per frame
-    void Update()
+    internal void Update()
     {
         
     }

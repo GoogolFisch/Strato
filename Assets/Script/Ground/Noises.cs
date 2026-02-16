@@ -16,7 +16,7 @@ public class Noises
     }
     public static void rotate(float px,float py,out float rx,out float ry,float angle){
         rx = px * Mathf.Cos(angle) + py * Mathf.Sin(angle);
-        ry = px * Mathf.Sin(angle) - py * Mathf.Cos(angle);
+        ry = -px * Mathf.Sin(angle) + py * Mathf.Cos(angle);
     }
 
     public float GetHeight(float px,float py){

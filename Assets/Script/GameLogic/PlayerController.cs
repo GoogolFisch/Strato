@@ -3,7 +3,6 @@ using System.Transactions;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.InputSystem;
-using System.Runtime.CompilerServices;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,7 +22,6 @@ public class PlayerController : MonoBehaviour
     public InputActionReference mouseDownAct; // ???
     public InputActionReference mouseMoveAct; // ???
     public InputActionReference mouseScrollAct; // ???
-    public BaseEntity selectedEnt;
     //
     //UnityEvent m_MyEvent;
     void Start()
@@ -62,7 +60,7 @@ public class PlayerController : MonoBehaviour
         Vector2 scrolling = mouseScrollAct.action.ReadValue<Vector2>();
         // IDK
         if(scrolling.y > 0.01 || scrolling.y < -0.01){
-            scrollSet -= scrolling.y;
+            scrollSet -= scrolling.y * 2;
             if(scrollSet < 5)scrollSet = 5;
             if(scrollSet > 50)scrollSet = 50;
             move -= Vector3.up * (transform.position.y - scrollSet);
@@ -81,15 +79,22 @@ public class PlayerController : MonoBehaviour
         //Physics.Raycast(origin, direction, out hit, distance, layerMask);
         Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
         int layerMask = LayerMask.GetMask("Selectable");
-        while(count-- > 0 && Physics.Raycast(rayCast,out _hit,99,layerMask)){
+        BaseEntity selectedEnt = null;
+        if(count-- > 0 && Physics.Raycast(rayCast,out _hit,99,layerMask)){
         //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
             GameObject item = _hit.transform.gameObject;
             //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
-            Debug.Log(item);
-            selectedEnt = null;
+            //Debug.Log(item);
             //if(_hit.transform.parent.gameObject)
             selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
+            if(selectedEnt == null)
+            {
+                if(_hit.transform.parent.parent != null)
+                    selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
+            }
         }
+        EntityManager.em.DoSelectObject(selectedEnt);
+
     }
 
 }
