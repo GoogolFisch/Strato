@@ -36,6 +36,14 @@ public class EntityManager : MonoBehaviour
 
     public BaseEntity selectedEnt;
     public SelectedObj insertWithSelected;
+
+    public bool DoSelectScreenSpace(Vector2 pos)
+    {
+        Vector3 uiPos = RectTransformUtility.WorldToScreenPoint(Camera.main, Vector3.zero);
+        Debug.Log(uiPos);
+        Debug.Log(pos);
+        return true;
+    }
     public void DoSelectObject(BaseEntity gm)
     {
         if(selectedEnt == gm)return;
@@ -51,6 +59,6 @@ public class EntityManager : MonoBehaviour
             Vector3 vpos = gm.transform.position + Vector3.up * 3;
             Instantiate(insertWithSelected,vpos,Quaternion.identity,gm.transform);
         }
-        
+
     }
 }

@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager gm;
     public int currentTeam;
     public LanConnector localConnector;
+    public UIManager uiMan;
     GroundState gs;
     void Awake(){
         gm = this;

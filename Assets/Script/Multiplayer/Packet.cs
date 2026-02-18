@@ -4,19 +4,21 @@ using System.Data.Common;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
-using System.Text.Unicode;
-using System.Threading.Channels;
 
 
 public class Packet
 {
-    private static List<Type> SetupPackets()
+    private static List<Func<int,int,byte[],int,Packet>> SetupPackets()
     {
-        List<Type> possible = new List<Type>(new Type[(int)PacketTypes.PackUp]);
-        possible[(int)PacketTypes.PingPack] = PingPacket;
+        List<Func<int,int,byte[],int,Packet>> possible = new List<Func<int,int,byte[],int,Packet>>();
+        for(int idx = 0;idx < (int)PacketTypes.PackUp;idx++)
+            possible.Add(null);
+        possible[(int)PacketTypes.PingPack] = PingPacket.CreatePacket;
+        possible[(int)PacketTypes.ChatPacket] = ChatPacket.CreatePacket;
         return possible;
     }
-    public static List<Type> possible = SetupPackets();
+    public static List<Func<int,int,byte[],int,Packet>> possible = SetupPackets();
+    //public static List<Action> assdd = SetupPackets();
     
     public PacketTypes id;
     public Packet()
@@ -36,8 +38,7 @@ public class Packet
         if(possible.Count < id)return new Packet(id);
         if(id < 0)return new Packet(id);
         //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
-        MethodInfo meth = possible[id].GetMethod("CreatePacket");
-        Packet pout = (Packet)meth.Invoke(null,new object[]{id,index,message,length});
+        Packet pout = (Packet)possible[id](id,index,message,length);
         index += length;
         return pout;
     }
@@ -53,7 +54,7 @@ public class Packet
     }
     public static string ConvertToString(byte[] message,ref int index)
     {
-        int length = BitConverter.GetBytes(message,index);
+        int length = BitConverter.ToInt32(message,index);
         string outp = new string(Encoding.UTF8.GetChars(message,index + 4,length));
         index += 4 + length;
         return outp;
@@ -63,11 +64,11 @@ public class Packet
         List<byte> bout = new List<byte>();
         byte[] utf8Out = Encoding.UTF8.GetBytes(str);
         bout.AddRange(BitConverter.GetBytes(utf8Out.Length));
-        bout.Add(utf8Out);
+        bout.AddRange(utf8Out);
         return bout;
     }
     // override these
-    public List<byte> PacketData()
+    virtual public List<byte> PacketData()
     {
         return new List<byte>();
     }

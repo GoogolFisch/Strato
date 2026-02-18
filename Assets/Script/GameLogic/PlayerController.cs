@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
         int count = 9;
         RaycastHit _hit;
         Vector2 mousePos = Mouse.current.position.ReadValue();
+        if(!EntityManager.em.DoSelectScreenSpace(mousePos)){return;}
         //Physics.Raycast(origin, direction, out hit, distance, layerMask);
         Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
         int layerMask = LayerMask.GetMask("Selectable");

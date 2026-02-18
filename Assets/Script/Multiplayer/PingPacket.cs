@@ -1,4 +1,6 @@
 using System.Net.NetworkInformation;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PingPacket : Packet
@@ -26,14 +28,14 @@ public class PingPacket : Packet
         return outp;
     }
 
-    override public static Packet CreatePacket(int id,int index,byte[] message,int length)
+    new public static Packet CreatePacket(int id,int index,byte[] message,int length)
     {
         PingPacket pingp = new PingPacket();
         pingp.lastTick = BitConverter.ToInt32(message,index);
-        int length = 0;
-        length = BitConverter.ToInt32(message,index + 4);
+        int counting = 0;
+        counting = BitConverter.ToInt32(message,index + 4);
         index += 8;
-        for(int idx = 0;idx < length; idx++)
+        for(int idx = 0;idx < counting && length < idx + index; idx++)
         {
             pingp.pingOf.Add(new Tuple<string, float>(
                 Packet.ConvertToString(message,ref index),
