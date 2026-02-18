@@ -15,11 +15,13 @@ public class PlayerController : MonoBehaviour
     float scrollSet = 0;
     float timeOffset = 0;
     bool oldMouseDown = false;
+    bool oldMouseDown2 = false;
     //
     [Header("Input Actions")]
     public InputActionReference moveAction; // expects Vector2
     public InputActionReference fastAction; // expects Vector2
     public InputActionReference mouseDownAct; // ???
+    public InputActionReference mouseDown2Act; // ???
     public InputActionReference mouseMoveAct; // ???
     public InputActionReference mouseScrollAct; // ???
     //
@@ -53,6 +55,14 @@ public class PlayerController : MonoBehaviour
             minput *= 0.002f;
             move -= new Vector3(minput.x,0,minput.y);
         }
+        //
+        float mouseDown2 = mouseDown2Act.action.ReadValue<float>();
+        if(mouseDown2 > 0.5 && !oldMouseDown2){
+            timeOffset = 0;
+        }
+        if(mouseDown2 <= 0.5 && oldMouseDown2 && timeOffset < 0.2 && !oldMouseDown){
+            TrySelectEntity2();
+        }
 
         // Combine horizontal and vertical movement
         move *= playerSpeed;
@@ -70,10 +80,11 @@ public class PlayerController : MonoBehaviour
         transform.position += move;
         timeOffset += Time.deltaTime;
         oldMouseDown = (mouseDown > 0.5);
+        //
+        oldMouseDown2 = (mouseDown2 > 0.5);
     }
     void TrySelectEntity()
     {
-        int count = 9;
         RaycastHit _hit;
         Vector2 mousePos = Mouse.current.position.ReadValue();
         if(!EntityManager.em.DoSelectScreenSpace(mousePos)){return;}
@@ -81,7 +92,7 @@ public class PlayerController : MonoBehaviour
         Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
         int layerMask = LayerMask.GetMask("Selectable");
         BaseEntity selectedEnt = null;
-        if(count-- > 0 && Physics.Raycast(rayCast,out _hit,99,layerMask)){
+        if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
         //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
             GameObject item = _hit.transform.gameObject;
             //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
@@ -95,7 +106,32 @@ public class PlayerController : MonoBehaviour
             }
         }
         EntityManager.em.DoSelectObject(selectedEnt);
-
     }
 
+
+    void TrySelectEntity2()
+    {
+        RaycastHit _hit;
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        if(!EntityManager.em.DoSelectScreenSpace(mousePos)){return;}
+        //Physics.Raycast(origin, direction, out hit, distance, layerMask);
+        Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
+        // TODO
+        int layerMask = LayerMask.GetMask("Selectable");
+        BaseEntity selectedEnt = null;
+        if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
+        //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
+            GameObject item = _hit.transform.gameObject;
+            //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            //Debug.Log(item);
+            //if(_hit.transform.parent.gameObject)
+            selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
+            if(selectedEnt == null)
+            {
+                if(_hit.transform.parent.parent != null)
+                    selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
+            }
+        }
+        EntityManager.em.DoSelectObject(selectedEnt);
+    }
 }

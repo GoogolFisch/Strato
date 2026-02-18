@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using System.Data.Common;
 
 
 public class Packet
@@ -32,11 +32,15 @@ public class Packet
 
     public static Packet ParsePacket(byte[] message,ref int index)
     {
+        if(index + 8 < message.Length)return null;
         int id = BitConverter.ToInt32(message,index);
         int length = BitConverter.ToInt32(message,index + 4);
         index += 8;
         if(possible.Count < id)return new Packet(id);
         if(id < 0)return new Packet(id);
+        //
+        if(id == 0 && length == 0)return null;
+        if(length + index >= message.Length)return null;
         //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
         Packet pout = (Packet)possible[id](id,index,message,length);
         index += length;

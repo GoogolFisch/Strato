@@ -1040,6 +1040,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MDown2",
+                    "type": "Button",
+                    "id": "fc2cde6f-3e62-492e-a972-739b16fcd6e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1238,6 +1247,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b53969bd-abf8-4c95-ac54-7cf49624f798",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MDown2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
