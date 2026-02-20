@@ -19,19 +19,32 @@ public class BaseEntity : MonoBehaviour
     }
     internal void Start()
     {
+        int collideLayer;
         if(playerOwner == GameManager.gm.currentTeam)
         {
-            //gameObject.layer = LayerMask.NameToLayer("Selectable");
-            int collideLayer = LayerMask.NameToLayer("Selectable");
-            gameObject.layer = collideLayer;
-            // turn all of the children to be raycastable (2 layers)
-            foreach (Transform child in gameObject.transform)
+            collideLayer = LayerMask.NameToLayer("Selectable");
+            moveToLayer(collideLayer);
+        }
+        else if(playerOwner > 0)
+        {
+            collideLayer = LayerMask.NameToLayer("Attackable");
+            moveToLayer(collideLayer);
+        }
+    }
+    void moveToLayer(int collideLayer)
+    {
+        if(collideLayer < 0 || collideLayer > 31){
+            Debug.Log("layer errror!");
+            return;
+        }
+        gameObject.layer = collideLayer;
+        // turn all of the children to be raycastable (2 layers)
+        foreach (Transform child in gameObject.transform)
+        {
+            child.gameObject.layer = collideLayer;
+            foreach (Transform child2 in child)
             {
-                child.gameObject.layer = collideLayer;
-                foreach (Transform child2 in child)
-                {
-                    child2.gameObject.layer = collideLayer;
-                }
+                child2.gameObject.layer = collideLayer;
             }
         }
     }

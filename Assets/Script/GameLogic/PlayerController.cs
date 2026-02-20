@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
         //Physics.Raycast(origin, direction, out hit, distance, layerMask);
         Ray rayCast = Camera.main.ScreenPointToRay(mousePos);
         // TODO
-        int layerMask = LayerMask.GetMask("Selectable");
+        int layerMask = LayerMask.GetMask("Attackable");
         BaseEntity selectedEnt = null;
         if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
         //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
@@ -132,6 +132,6 @@ public class PlayerController : MonoBehaviour
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
         }
-        EntityManager.em.DoSelectObject(selectedEnt);
+        EntityManager.em.DoSelectObject2(selectedEnt);
     }
 }

@@ -59,6 +59,15 @@ public class EntityManager : MonoBehaviour
             Vector3 vpos = gm.transform.position + Vector3.up * 3;
             Instantiate(insertWithSelected,vpos,Quaternion.identity,gm.transform);
         }
-
+    }
+    public void DoSelectObject2(BaseEntity gm)
+    {
+        if(selectedEnt == gm)return;
+        if(gm == null)return;
+        if(selectedEnt.GetType() == typeof(MovingEntity))
+        {
+            MovingEntity ment = (MovingEntity)selectedEnt;
+            ment.targetEnt = gm;
+        }
     }
 }

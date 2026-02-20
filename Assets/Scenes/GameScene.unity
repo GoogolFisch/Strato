@@ -661,6 +661,7 @@ MonoBehaviour:
   moveAction: {fileID: -4080848848326229195, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   fastAction: {fileID: -4004486782183866892, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   mouseDownAct: {fileID: 7747747606708181587, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  mouseDown2Act: {fileID: 5612137086017370644, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   mouseMoveAct: {fileID: -3823933507203002967, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   mouseScrollAct: {fileID: 7779287621612232880, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &1325082559
