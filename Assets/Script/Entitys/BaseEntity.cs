@@ -7,6 +7,7 @@ public class BaseEntity : MonoBehaviour
     public float health;
     public float baseHealth;
     public int playerOwner;
+    public int tick;
     //public Vector3 targetPosition;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -48,10 +49,20 @@ public class BaseEntity : MonoBehaviour
             }
         }
     }
+    public bool Damage(float i)
+    {
+        baseHealth -= i;
+        return baseHealth < 0;
+    }
 
     // Update is called once per frame
     internal void Update()
     {
         
+    }
+
+    internal void FixedUpdate()
+    {
+        tick++;
     }
 }

@@ -18,8 +18,6 @@ public class MovingEntity : BaseEntity
     new void Update()
     {
         base.Update();
-        Debug.Log(targetPos);
-        Debug.Log(targetEnt);
         if(targetPos != null)
             moveVector += targetPos - transform.position;
         if(targetEnt != null)
@@ -31,5 +29,9 @@ public class MovingEntity : BaseEntity
         transform.LookAt(moveVector + transform.position);
         transform.position += moveVector * speed * Time.deltaTime;
         moveVector = Vector3.zero;
+    }
+    new internal void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
 }

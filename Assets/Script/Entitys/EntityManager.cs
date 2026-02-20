@@ -69,5 +69,25 @@ public class EntityManager : MonoBehaviour
             MovingEntity ment = (MovingEntity)selectedEnt;
             ment.targetEnt = gm;
         }
+        /*
+        if(selectedEnt.GetType() == typeof(TowerEntity))
+        {
+            TowerEntity ment = (TowerEntity)selectedEnt;
+            ment.targetEnt = gm;
+        }
+        // */
+    }
+    public List<BaseEntity> getCircleEntity(Vector3 pos,float radius)
+    {
+        // TODO make faster
+        List<BaseEntity> bent = new List<BaseEntity>();
+        foreach(long i in enityList.Keys)
+        {
+            BaseEntity be = enityList[i];
+            float dist = Vector3.Distance(pos,be.transform.position);
+            if(dist / 2 > radius)continue;
+            bent.Add(be);
+        }
+        return bent;
     }
 }
