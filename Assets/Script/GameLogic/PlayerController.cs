@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
             EntityManager.em.DoSelectObject2(selectedEnt);
             return;
         }
-        layerMask = layerMask.GetMask("Selectable");
+        layerMask = LayerMask.GetMask("Selectable");
         if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
         //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
             GameObject item = _hit.transform.gameObject;
