@@ -104,8 +104,8 @@ public class PlayerController : MonoBehaviour
                 if(_hit.transform.parent.parent != null)
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
+            EntityManager.em.DoSelectObject(selectedEnt);
         }
-        EntityManager.em.DoSelectObject(selectedEnt);
     }
 
 
@@ -131,7 +131,24 @@ public class PlayerController : MonoBehaviour
                 if(_hit.transform.parent.parent != null)
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
+            EntityManager.em.DoSelectObject2(selectedEnt);
+            return;
         }
-        EntityManager.em.DoSelectObject2(selectedEnt);
+        layerMask = layerMask.GetMask("Selectable");
+        if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
+        //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
+            GameObject item = _hit.transform.gameObject;
+            //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            //Debug.Log(item);
+            //if(_hit.transform.parent.gameObject)
+            selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
+            if(selectedEnt == null)
+            {
+                if(_hit.transform.parent.parent != null)
+                    selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
+            }
+            EntityManager.em.DoSelectObject3(selectedEnt);
+            return;
+        }
     }
 }

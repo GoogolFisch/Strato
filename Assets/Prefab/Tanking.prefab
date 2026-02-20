@@ -47,8 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   id: 0
   health: 0
-  baseHealth: 0
+  baseHealth: 20
   playerOwner: 0
+  tick: 0
   targetPos: {x: 0, y: 0, z: 0}
   targetEnt: {fileID: 0}
   speed: 1

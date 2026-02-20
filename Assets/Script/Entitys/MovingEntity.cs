@@ -22,7 +22,9 @@ public class MovingEntity : BaseEntity
             moveVector += targetPos - transform.position;
         if(targetEnt != null)
             moveVector += targetEnt.transform.position - transform.position;
-        moveVector.Normalize();
+        float mag = moveVector.magnitude;
+        if(mag > 1)
+            moveVector.Normalize();
 
         
 

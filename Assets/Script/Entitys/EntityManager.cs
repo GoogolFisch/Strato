@@ -77,6 +77,9 @@ public class EntityManager : MonoBehaviour
         }
         // */
     }
+    public void DoSelectObject3(BaseEntity gm)
+    {
+    }
     public List<BaseEntity> getCircleEntity(Vector3 pos,float radius)
     {
         // TODO make faster
