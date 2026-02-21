@@ -29,33 +29,6 @@ public class Packet
     {
         this.id = (PacketTypes)id;
     }
-
-    public static Packet ParsePacket(byte[] message,ref int index)
-    {
-        if(index + 8 < message.Length)return null;
-        int id = BitConverter.ToInt32(message,index);
-        int length = BitConverter.ToInt32(message,index + 4);
-        index += 8;
-        if(possible.Count < id)return new Packet(id);
-        if(id < 0)return new Packet(id);
-        //
-        if(id == 0 && length == 0)return null;
-        if(length + index >= message.Length)return null;
-        //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
-        Packet pout = (Packet)possible[id](id,index,message,length);
-        index += length;
-        return pout;
-    }
-
-    public byte[] PackPacket()
-    {
-        List<byte> messOut = PacketData();
-        List<byte> bout = new List<byte>();
-        bout.AddRange(BitConverter.GetBytes((int)id));
-        bout.AddRange(BitConverter.GetBytes(messOut.Count));
-        bout.AddRange(messOut);
-        return bout.ToArray();
-    }
     public static string ConvertToString(byte[] message,ref int index)
     {
         int length = BitConverter.ToInt32(message,index);
@@ -70,6 +43,34 @@ public class Packet
         bout.AddRange(BitConverter.GetBytes(utf8Out.Length));
         bout.AddRange(utf8Out);
         return bout;
+    }
+    public bool keepIfOrderMism(){return false;}
+
+    public static Packet ParsePacket(byte[] message,ref int index)
+    {
+        if(index + 8 < message.Length)return null;
+        int length = BitConverter.ToInt32(message,index);
+        int id = BitConverter.ToInt32(message,index + 4);
+        if(length + index >= message.Length)return null;
+        index += 8;
+        if(possible.Count < id)return new Packet(id);
+        if(id < 0)return new Packet(id);
+        //
+        if(id == 0 && length == 0)return null;
+        //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
+        Packet pout = (Packet)possible[id](id,index,message,length);
+        index += length;
+        return pout;
+    }
+
+    public byte[] PackPacket()
+    {
+        List<byte> messOut = PacketData();
+        List<byte> bout = new List<byte>();
+        bout.AddRange(BitConverter.GetBytes(messOut.Count));
+        bout.AddRange(BitConverter.GetBytes((int)id));
+        bout.AddRange(messOut);
+        return bout.ToArray();
     }
     // override these
     virtual public List<byte> PacketData()

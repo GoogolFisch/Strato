@@ -9,12 +9,13 @@ using UnityEngine;
 // https://github.com/oculus-samples/Unity-LocalMultiplayerMR/blob/main/colocation-sample-ngo/Assets/Scripts/Samples/LocalNetworkDiscovery.cs
 public class LanConnector : IDisposable
 {
+    public const int PORT = 9876;
     private readonly int _port;
     private bool _isBroadcasting;
     private UdpClient _udpClient;
     private TaskCompletionSource<(IPEndPoint, byte[])> _onListenTcs;
 
-    public LanConnector(int port = 9876)
+    public LanConnector(int port = PORT)
     {
         _port = port;
     }
