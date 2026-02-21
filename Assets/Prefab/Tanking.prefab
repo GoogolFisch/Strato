@@ -51,6 +51,7 @@ MonoBehaviour:
   playerOwner: 0
   tick: 0
   targetPos: {x: 0, y: 0, z: 0}
+  followEnt: {fileID: 0}
   targetEnt: {fileID: 0}
   speed: 1
   moveVector: {x: 0, y: 0, z: 0}

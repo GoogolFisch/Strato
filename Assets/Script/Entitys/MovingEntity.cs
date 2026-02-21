@@ -3,6 +3,7 @@ using UnityEngine;
 public class MovingEntity : BaseEntity
 {
     public Vector3 targetPos;
+    public BaseEntity followEnt;
     public BaseEntity targetEnt;
 
     public float speed = 1;
@@ -20,16 +21,22 @@ public class MovingEntity : BaseEntity
         base.Update();
         if(targetPos != null)
             moveVector += targetPos - transform.position;
-        if(targetEnt != null)
+        else if(followEnt != null)
+            moveVector += followEnt.transform.position - transform.position;
+        else if(targetEnt != null)
             moveVector += targetEnt.transform.position - transform.position;
         float mag = moveVector.magnitude;
-        if(mag > 1)
-            moveVector.Normalize();
+        if(mag > 2)
+            moveVector *= 1 / mag;
+        else if(mag > 1)
+            moveVector *= 1 / (mag - 1);
+        else
+            moveVector = Vector3.zero;
 
-        
-
-        transform.LookAt(moveVector + transform.position);
-        transform.position += moveVector * speed * Time.deltaTime;
+        if(mag > 1){
+            transform.LookAt(moveVector + transform.position);
+            transform.position += moveVector * speed * Time.deltaTime;
+        }
         moveVector = Vector3.zero;
     }
     new internal void FixedUpdate()

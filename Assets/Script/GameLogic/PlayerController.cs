@@ -150,5 +150,19 @@ public class PlayerController : MonoBehaviour
             EntityManager.em.DoSelectObject3(selectedEnt);
             return;
         }
+        // set move
+
+        rayCast = Camera.main.ScreenPointToRay(mousePos);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        //Initialise the enter variable
+        float enter = 0.0f;
+
+        if (groundPlane.Raycast(rayCast, out enter))
+        {
+            //Get the point that is clicked
+            Vector3 hitPoint = rayCast.GetPoint(enter);
+            
+            EntityManager.em.DoSelectGround(hitPoint);
+        }
     }
 }

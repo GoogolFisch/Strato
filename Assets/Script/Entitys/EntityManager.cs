@@ -67,7 +67,7 @@ public class EntityManager : MonoBehaviour
         if(selectedEnt.GetType() == typeof(MovingEntity))
         {
             MovingEntity ment = (MovingEntity)selectedEnt;
-            ment.targetEnt = gm;
+            ment.targetPos = gm.transform.position;
         }
         /*
         if(selectedEnt.GetType() == typeof(TowerEntity))
@@ -79,6 +79,23 @@ public class EntityManager : MonoBehaviour
     }
     public void DoSelectObject3(BaseEntity gm)
     {
+        if(selectedEnt == gm)return;
+        if(gm == null)
+            return;
+        if(selectedEnt.GetType() == typeof(MovingEntity))
+        {
+            MovingEntity ment = (MovingEntity)selectedEnt;
+            ment.followEnt = gm;
+        }
+    }
+    public void DoSelectGround(Vector3 hit)
+    {
+        if(selectedEnt == null)return;
+        if(selectedEnt.GetType() == typeof(MovingEntity))
+        {
+            MovingEntity ment = (MovingEntity)selectedEnt;
+            ment.targetPos = hit;
+        }
     }
     public List<BaseEntity> getCircleEntity(Vector3 pos,float radius)
     {
