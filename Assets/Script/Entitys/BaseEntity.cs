@@ -16,10 +16,10 @@ public class BaseEntity : MonoBehaviour
         {
             id = Random.Range(0,0x10000) + (Random.Range(0,0x10000) <<16);
         }
-        EntityManager.em.enityList.Add(id,this);
     }
     internal void Start()
     {
+        EntityManager.em.enityList.Add(id,this);
         int collideLayer;
         if(playerOwner == GameManager.gm.currentTeam)
         {

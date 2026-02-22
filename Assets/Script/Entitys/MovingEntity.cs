@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class MovingEntity : BaseEntity
 {
@@ -7,7 +8,9 @@ public class MovingEntity : BaseEntity
     public BaseEntity targetEnt;
 
     public float speed = 1;
+    public float colRadius = 1;
     public Vector3 moveVector;
+    public Vector3 redirectVel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
     {
@@ -19,28 +22,83 @@ public class MovingEntity : BaseEntity
     new void Update()
     {
         base.Update();
-        if(targetPos != null)
-            moveVector += targetPos - transform.position;
-        else if(followEnt != null)
-            moveVector += followEnt.transform.position - transform.position;
-        else if(targetEnt != null)
-            moveVector += targetEnt.transform.position - transform.position;
         float mag = moveVector.magnitude;
-        if(mag > 2)
-            moveVector *= 1 / mag;
-        else if(mag > 1)
-            moveVector *= 1 / (mag - 1);
-        else
-            moveVector = Vector3.zero;
+        Vector3 moving = moveVector;
 
-        if(mag > 1){
-            transform.LookAt(moveVector + transform.position);
-            transform.position += moveVector * speed * Time.deltaTime;
+        if(mag > 1)
+            moving /= mag;
+        if(mag > 0.9){
+            if(mag > 0.8)
+                transform.LookAt(moveVector + transform.position);
+            transform.position += moving * speed * Time.deltaTime;
         }
-        moveVector = Vector3.zero;
     }
     new internal void FixedUpdate()
     {
+        moveVector = Vector3.zero;
         base.FixedUpdate();
+        float mag;
+        float colMag, strength;
+        Vector3 away;
+        if(followEnt != null)
+        {
+            if(followEnt.GetType() == typeof(MovingEntity)){
+                Vector3 preMove = ((MovingEntity)followEnt).moveVector;
+                preMove.Normalize();
+                moveVector += preMove;
+            }
+
+            away = transform.position - followEnt.transform.position;
+            mag = away.magnitude;
+            colMag = mag / colRadius;
+            strength = 2 / (colMag * colMag + 1) - 1;
+            if(mag > 0.01){
+                moveVector += strength * away / mag;
+            }
+        }
+        else if(targetPos != null)
+            moveVector += targetPos - transform.position;
+        else if(targetEnt != null)
+            moveVector += targetEnt.transform.position - transform.position;
+        mag = moveVector.magnitude;
+        if(mag > 0.5)
+            moveVector += redirectVel;
+        if(mag < 0.5){
+            moveVector = Vector3.zero;
+            // TODO add message, that it should stop?
+        }
+
+        if(tick < 6)
+            return;
+        tick = 0;
+        List<BaseEntity> bes = EntityManager.em.getCircleEntity(
+                                transform.position,colRadius);
+        redirectVel = Vector3.zero;
+        foreach(BaseEntity be in bes)
+        {
+            if(be == this)continue;
+            away = transform.position - be.transform.position;
+            mag = away.magnitude;
+            colMag = mag / colRadius;
+            strength = 2 / (colMag * colMag + 1) - 1;
+            if(mag > 0.01){
+                moveVector += strength * away / mag;
+            }
+        }
+    }
+    public void FollowEnt(BaseEntity be)
+    {
+        followEnt = be;
+        if(be.GetType() == typeof(MovingEntity))
+        {
+            MovingEntity ment = (MovingEntity)be;
+            if(ment.followEnt != null)
+                followEnt = ment.followEnt;
+        }
+    }
+    public void FollowPos(Vector3 pos)
+    {
+        followEnt = null;
+        targetPos = pos;
     }
 }

@@ -104,8 +104,8 @@ public class PlayerController : MonoBehaviour
                 if(_hit.transform.parent.parent != null)
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
-            EntityManager.em.DoSelectObject(selectedEnt);
         }
+        EntityManager.em.DoSelectObject(selectedEnt);
     }
 
 
@@ -120,33 +120,29 @@ public class PlayerController : MonoBehaviour
         int layerMask = LayerMask.GetMask("Attackable");
         BaseEntity selectedEnt = null;
         if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
-        //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
             GameObject item = _hit.transform.gameObject;
-            //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
-            //Debug.Log(item);
-            //if(_hit.transform.parent.gameObject)
             selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
             if(selectedEnt == null)
             {
                 if(_hit.transform.parent.parent != null)
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
+            Debug.Log($"att {selectedEnt}");
             EntityManager.em.DoSelectObject2(selectedEnt);
             return;
         }
+        // follow stuff
+        rayCast = Camera.main.ScreenPointToRay(mousePos);
         layerMask = LayerMask.GetMask("Selectable");
         if(Physics.Raycast(rayCast,out _hit,99,layerMask)){
-        //while(count-- > 0 && Physics.Raycast(rayCast,out _hit)){
             GameObject item = _hit.transform.gameObject;
-            //item.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
-            //Debug.Log(item);
-            //if(_hit.transform.parent.gameObject)
             selectedEnt = _hit.transform.parent.GetComponent<BaseEntity>();
             if(selectedEnt == null)
             {
                 if(_hit.transform.parent.parent != null)
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
+            Debug.Log($"sel {selectedEnt}");
             EntityManager.em.DoSelectObject3(selectedEnt);
             return;
         }
@@ -159,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
         if (groundPlane.Raycast(rayCast, out enter))
         {
+            Debug.Log($"mov {enter}");
             //Get the point that is clicked
             Vector3 hitPoint = rayCast.GetPoint(enter);
             
