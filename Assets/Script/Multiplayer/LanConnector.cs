@@ -9,7 +9,7 @@ using UnityEngine;
 // https://github.com/oculus-samples/Unity-LocalMultiplayerMR/blob/main/colocation-sample-ngo/Assets/Scripts/Samples/LocalNetworkDiscovery.cs
 public class LanConnector : IDisposable
 {
-    public const int PORT = 9876;
+    public const int PORT = 25359;
     private readonly int _port;
     private bool _isBroadcasting;
     private UdpClient _udpClient;
@@ -23,6 +23,16 @@ public class LanConnector : IDisposable
     {
         StopListening();
         StopBroadcasting();
+    }
+
+    public static byte[] MakeSessionInfo(string str)
+    {
+        const int VERSION = 1;
+        List<byte> barr = new List<byte>();
+        barr.AddRange(BitConverter.GetBytes(VERSION));
+        barr.AddRange(Packet.ConvertFromString(str));
+        
+        return barr.ToArray();
     }
 
 

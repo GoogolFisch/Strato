@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Net;
 
-public class ServerConnection
+public class ServerHandler
 {
     public bool isServer;
     //public List<byte[]> fetchedInternet;
@@ -19,7 +19,7 @@ public class ServerConnection
     public List<DirConnection> clCons;
     public DirConnection dirServerCon;
 
-    public ServerConnection(Socket listener,bool isServer)
+    public ServerHandler(Socket listener,bool isServer)
     {
         serverSocket = listener;
         if (isServer)

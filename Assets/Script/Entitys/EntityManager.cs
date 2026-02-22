@@ -31,7 +31,7 @@ public class EntityManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        em = this;
     }
 
     public BaseEntity selectedEnt;
