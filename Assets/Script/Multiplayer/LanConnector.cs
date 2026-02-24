@@ -11,6 +11,7 @@ public class LanConnector : IDisposable
 {
     public const int PORT = 25359;
     private readonly int _port;
+    // volitile?
     private bool _isBroadcasting;
     private UdpClient _udpClient;
     private TaskCompletionSource<(IPEndPoint, byte[])> _onListenTcs;
@@ -34,12 +35,22 @@ public class LanConnector : IDisposable
         
         return barr.ToArray();
     }
+    public static StructMenuListing GetSessionInfo(byte[] mes){
+        StructMenuListing sml = new StructMenuListing();
+        int offset = 4;
+        sml.version = BitConverter.ToInt32(mes);
+        sml.display = Packet.ConvertToString(mes,ref offset);
+        sml.plCount = BitConverter.ToInt32(mes,offset);
+        sml.maxPlCnt = BitConverter.ToInt32(mes,offset + 4);
+        offset += 8;
+        return sml;
+    }
 
 
     public async Task<(IPEndPoint, byte[])> ListenForConnection()
     {
         _onListenTcs = new();
-        Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
+        //Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
 
         _udpClient = new UdpClient(_port);
         _udpClient.BeginReceive(Receive, _udpClient);
@@ -112,7 +123,7 @@ public class LanConnector : IDisposable
         Debug.Log($"{nameof(LanConnector)}: Stopped broadcasting.");
     }
 
-    private void StopBroadcasting()
+    public void StopBroadcasting()
     {
         _isBroadcasting = false;
     }

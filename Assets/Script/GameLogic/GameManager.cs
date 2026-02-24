@@ -6,8 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gm;
     public int currentTeam;
-    public LanConnector localConnector;
-    public ServerHandler servHandler;
+    public MemoryHandler memHand;
     public UIManager uiMan;
     public string roomName = "name";
     GroundState gs;
@@ -18,10 +17,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        localConnector = new LanConnector();
-        //servHandler = new ServerHandler();
-        localConnector.StartBroadcasting(
-                LanConnector.MakeSessionInfo(roomName),15);
+        memHand = MemoryHandler.mh;
     }
     
     public void RegisterGroundService(GroundState gs){
@@ -30,9 +26,10 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        gm = this;
     }
     public void FixedUpdate()
     {
+        gm = this;
+        memHand = MemoryHandler.mh;
     }
 }

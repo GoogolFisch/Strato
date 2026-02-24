@@ -1192,6 +1192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   currentTeam: 0
   uiMan: {fileID: 291409399}
+  roomName: name
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

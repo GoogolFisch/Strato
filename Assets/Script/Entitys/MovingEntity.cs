@@ -40,6 +40,8 @@ public class MovingEntity : BaseEntity
         float mag;
         float colMag, strength;
         Vector3 away;
+        // TODO make it attack when enemys are nearby
+        // this would remove the wired ending behaviour
         if(followEnt != null)
         {
             if(followEnt.GetType() == typeof(MovingEntity)){
@@ -82,9 +84,11 @@ public class MovingEntity : BaseEntity
             colMag = mag / colRadius;
             strength = 2 / (colMag * colMag + 1) - 1;
             if(mag > 0.01){
-                moveVector += strength * away / mag;
+                redirectVel += strength * away / mag;
             }
         }
+        redirectVel.Normalize();
+        transform.position = new Vector3(transform.position.x,0,transform.position.z);
     }
     public void FollowEnt(BaseEntity be)
     {

@@ -31,7 +31,9 @@ public class Packet
     }
     public static string ConvertToString(byte[] message,ref int index)
     {
+        if(message.Length - index < 4)return null;
         int length = BitConverter.ToInt32(message,index);
+        if(message.Length - index - 4 < length)return null;
         string outp = new string(Encoding.UTF8.GetChars(message,index + 4,length));
         index += 4 + length;
         return outp;
