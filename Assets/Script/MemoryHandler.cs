@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class MemoryHandler : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class MemoryHandler : MonoBehaviour
     public bool hasSenders = false;
     public LanConnector udpLan;
     public ServerHandler shan;
+
+    public const string scMenu = "MainMenu";
+    public const string scGame = "GameScene";
+
 
     Task<(IPEndPoint,byte[])> udpListenerTask;
     Task broadcastSender;
@@ -80,5 +85,24 @@ public class MemoryHandler : MonoBehaviour
         if(udpLan != null)
             udpLan.Dispose();
         if(!created)return;
+    }
+
+    // true on success
+    public bool ConnectToServer(IPEndPoint ipe){
+        return true;
+    }
+
+    public void SetActiveScene(string sc){
+        //Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(sc);
+        //var newScene = SceneManager.CreateScene("GameScene",LoadSceneMode.Single);
+        /*SceneManager.UnloadSceneAsync("MainMenu");
+        SceneManager.OpenScene("GameScene", LoadSceneMode.Additive); //  */
+        //SceneManager.OpenScene("GameScene", LoadSceneMode.Single);
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sc));
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sc));
+        //SceneManager.UnloadSceneAsync(currentScene);
+
+        Debug.Log(sc);
     }
 }

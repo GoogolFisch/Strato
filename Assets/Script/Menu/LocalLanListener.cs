@@ -3,6 +3,7 @@ using System.Net;
 using UnityEngine.Serialization;
 using System.Collections;
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -39,21 +40,46 @@ public class LocalLanListener : MonoBehaviour
                 iterEp.Port == eps.Port && iterEp.Address.Equals(eps.Address)
                 ))
                 continue;
-            Debug.Log($"{eps} ?= {iterEp}");
+            //Debug.Log($"{eps} ?= {iterEp}");
             DestroyImmediate(iterBut.gameObject);
             foundList.RemoveAt(idx);
             break;
         }
-        int vers;
-        string strOut;
         StructMenuListing sml = LanConnector.GetSessionInfo(arr);
 
         Button nbut = Instantiate(button,Vector3.zero,Quaternion.identity,insertInto.transform);
+        nbut.onClick.AddListener(() => {MainMenu.mm.SetIp(eps);});
         Text cnttxt = Instantiate(text,nbut.transform.position,Quaternion.identity,nbut.transform);
         cnttxt.text = $"{sml.plCount}/{sml.maxPlCnt}";
         Text dsptxt = Instantiate(text,nbut.transform.position,Quaternion.identity,nbut.transform);
         dsptxt.text = sml.display;
         dsptxt.rectTransform.sizeDelta += new Vector2 (100, 0);
         foundList.Add((eps,nbut));
+    }
+
+    // Handles IPv4 and IPv6 notation.
+    public static string CreateIPEndPoint(string endPoint,out IPEndPoint ipe)
+    {
+        IPAddress ip;
+        string[] ep = endPoint.Split(':');
+        ipe = null;
+        if (ep.Length < 2) return "Invalid endpoint format";
+        if (ep.Length > 2)
+        {
+            if (!IPAddress.TryParse(string.Join(":", ep, 0, ep.Length - 1), out ip))
+                return "Invalid ipv6-adress";
+        }
+        else
+        {
+            if (!IPAddress.TryParse(ep[0], out ip))
+                return "Invalid ipv4-adress";
+        }
+        int port;
+        if (!int.TryParse(ep[ep.Length - 1], NumberStyles.None, NumberFormatInfo.CurrentInfo, out port))
+        {
+            return "Invalid port";
+        }
+        ipe = new IPEndPoint(ip,port);
+        return "";
     }
 }
