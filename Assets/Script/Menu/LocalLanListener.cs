@@ -45,6 +45,7 @@ public class LocalLanListener : MonoBehaviour
             foundList.RemoveAt(idx);
             break;
         }
+        Debug.Log(eps);
         StructMenuListing sml = LanConnector.GetSessionInfo(arr);
 
         Button nbut = Instantiate(button,Vector3.zero,Quaternion.identity,insertInto.transform);

@@ -64,6 +64,8 @@ public class MemoryHandler : MonoBehaviour
 
     public void StartBoradCasting(string roomName){
         const float BOARDCAST_DELTA = 15f;
+        if(udpLan == null)
+            udpLan = new LanConnector();
         if(hasSenders)return;
         if(broadcastSender != null)return;
             //broadcastSender = 

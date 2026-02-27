@@ -53,9 +53,9 @@ public class MainMenu : MonoBehaviour
     public void HostGame(int port){
         bool tstCnn = MemoryHandler.mh.HostGame(
                 new IPEndPoint(IPAddress.Any,port));
-        if(tstCnn){
-            MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
-        }
+        if(!tstCnn)return;
+        MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
+        MemoryHandler.mh.StartBoradCasting("Hello");
     }
     public void JoinGame(){
         int port;

@@ -9,6 +9,8 @@ public enum PacketTypes
     BaseEntityPacket,
     MovingEntityPacket,
 
+    SummonEntityPacket,
+
     PackUp,
     
 }

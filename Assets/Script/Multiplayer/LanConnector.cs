@@ -32,6 +32,8 @@ public class LanConnector : IDisposable
         List<byte> barr = new List<byte>();
         barr.AddRange(BitConverter.GetBytes(VERSION));
         barr.AddRange(Packet.ConvertFromString(str));
+        barr.AddRange(BitConverter.GetBytes(VERSION));
+        barr.AddRange(BitConverter.GetBytes(VERSION));
         
         return barr.ToArray();
     }
@@ -53,6 +55,7 @@ public class LanConnector : IDisposable
         //Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
 
         _udpClient = new UdpClient(_port);
+        _udpClient.ExclusiveAddressUse = false;
         _udpClient.BeginReceive(Receive, _udpClient);
         var resultTask = await Task.WhenAny(_onListenTcs.Task, CreateHostSessionTask());
         return resultTask.Result;
@@ -102,13 +105,15 @@ public class LanConnector : IDisposable
 
         try
         {
-            var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
+            //var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
+            var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
             using (var senderSocket = new UdpClient())
             {
                 senderSocket.EnableBroadcast = true;
 
                 while (_isBroadcasting)
                 {
+                    Debug.Log("BRD");
                     senderSocket.Send(sessionInformation, sessionInformation.Length, ipEndPoint);
                     await Task.Delay(TimeSpan.FromSeconds(broadcastInterval));
                 }
