@@ -18,7 +18,7 @@ def sending(data:bytes):
         time.sleep(DTIME)
 
 try:
-    bv = "Hello"
+    bv = b"Hello"
     if(len(sys.argv) > 1):
         bv = bytes(sys.argv[1],"utf-8")
     byting = b"\1\0\0\0"

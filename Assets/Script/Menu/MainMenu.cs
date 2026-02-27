@@ -54,7 +54,7 @@ public class MainMenu : MonoBehaviour
         ipErrorText.text = "";
         bool tstCnn = MemoryHandler.mh.ConnectToServer(ip);
         if(tstCnn){
-            MemoryHandler.mh.SetActiveScene(MemoryHandler.mh.scGame);
+            MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
         }
     }
 }
