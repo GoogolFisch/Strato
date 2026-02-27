@@ -24,8 +24,13 @@ public class ChatPacket : Packet
     new public static Packet CreatePacket(int id,int index,byte[] message,int length)
     {
         ChatPacket pingp = new ChatPacket();
-        pingp.playerName = Packet.ConvertToString(message,ref index);
-        pingp.playerMessage = Packet.ConvertToString(message,ref index);
+        pingp.PopulatePacket(ref index,message,length);
         return pingp;
     }
+    override public void PopulatePacket(ref int index,byte[] message,int length) {
+        playerName = Packet.ConvertToString(message,ref index);
+        playerMessage = Packet.ConvertToString(message,ref index);
+
+    }
+
 }

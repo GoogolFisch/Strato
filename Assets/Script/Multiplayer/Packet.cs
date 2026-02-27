@@ -74,14 +74,17 @@ public class Packet
         bout.AddRange(messOut);
         return bout.ToArray();
     }
+    public static Packet CreatePacket(int id,int index,byte[] message,int length)
+    {
+        return new Packet();
+    }
     // override these
     virtual public List<byte> PacketData()
     {
         return new List<byte>();
     }
 
-    public static Packet CreatePacket(int id,int index,byte[] message,int length)
-    {
-        return new Packet();
+    virtual public void PopulatePacket(ref int index,byte[] message,int length) {
+
     }
 }

@@ -6,6 +6,8 @@ public enum PacketTypes
     KeyExchangePack = 0,
     PingPack,
     ChatPacket,
+    BaseEntityPacket,
+    MovingEntityPacket,
 
     PackUp,
     

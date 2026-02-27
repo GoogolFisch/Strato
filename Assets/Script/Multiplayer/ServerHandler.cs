@@ -13,34 +13,35 @@ using System.Net;
 
 public class ServerHandler
 {
-    public bool isServer;
     //public List<byte[]> fetchedInternet;
-    public Socket serverSocket;
+    public TcpListener serverSocket;
     public List<DirConnection> clCons;
     public DirConnection dirServerCon;
 
-    public ServerHandler(Socket listener,bool isServer)
+    public ServerHandler(TcpListener listener)
     {
+        clCons = new List<DirConnection>();
+        //listener.Bind(new IPEndPoint(IPAddress.Any,LanConnector.PORT));
+        //listener.Listen(2);
         serverSocket = listener;
-        if (isServer)
-        {
-            clCons = new List<DirConnection>();
-            listener.Bind(new IPEndPoint(IPAddress.Any,LanConnector.PORT));
-            listener.Listen(2);
-        }
-        else
-        {
-            dirServerCon = new DirConnection(listener);
-        }
+    }
+    public ServerHandler(TcpClient socket)
+    {
+        //serverSocket = socket.Client;
+        dirServerCon = new DirConnection(socket);
     }
 
     public void Handel()
     {
-        
+        if (clCons == null)
+            dirServerCon.Handel();
+        else
+            foreach(DirConnection dc in clCons)
+                dc.Handel();
     }
     public void AddPacket(Packet p)
     {
-        if (!isServer)
+        if (clCons == null)
             dirServerCon.AddOutgoingPacket(p);
         else
             foreach(DirConnection dc in clCons)

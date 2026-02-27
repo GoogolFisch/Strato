@@ -9,6 +9,7 @@ public class DirConnection
     public byte[] symkey;
     internal byte[] prevBytes;
     public Socket sock;
+    public TcpClient tcpCl;
     public EndPoint point;
     public List<Packet> outgoingPackets;
     public List<Packet> incommingPackets;
@@ -18,6 +19,17 @@ public class DirConnection
         symkey = null;
         this.sock = sock;
         point = null;
+        tcpCl = null;
+        outgoingPackets = new List<Packet>();
+        incommingPackets = new List<Packet>();
+        prevBytes = new byte[0];
+    }
+    public DirConnection(TcpClient sock)
+    {
+        symkey = null;
+        this.sock = sock.Client;
+        point = null;
+        tcpCl = sock;
         outgoingPackets = new List<Packet>();
         incommingPackets = new List<Packet>();
         prevBytes = new byte[0];
@@ -126,7 +138,7 @@ public class DirConnection
 
     public void Handel()
     {
-        byte[] buffer = new byte[4096];
+        byte[] buffer = new byte[sock.Available];
         //EndPoint remote = null;
         while (sock.Available > 0)
         {

@@ -23,7 +23,7 @@ public class MovingEntity : BaseEntity
     {
         base.Update();
         float mag = moveVector.magnitude;
-        Vector3 moving = moveVector;
+        Vector3 moving = moveVector + redirectVel;
 
         if(mag > 1)
             moving /= mag;
@@ -63,9 +63,9 @@ public class MovingEntity : BaseEntity
         else if(targetEnt != null)
             moveVector += targetEnt.transform.position - transform.position;
         mag = moveVector.magnitude;
-        if(mag > 0.5)
-            moveVector += redirectVel;
-        if(mag < 0.5){
+        //if(mag > 0.5)
+        //    moveVector += redirectVel;
+        if(mag < 0.2){
             moveVector = Vector3.zero;
             // TODO add message, that it should stop?
         }
@@ -89,6 +89,7 @@ public class MovingEntity : BaseEntity
         }
         redirectVel.Normalize();
         transform.position = new Vector3(transform.position.x,0,transform.position.z);
+        SendStatus();
     }
     public void FollowEnt(BaseEntity be)
     {
@@ -104,5 +105,9 @@ public class MovingEntity : BaseEntity
     {
         followEnt = null;
         targetPos = pos;
+    }
+    public void SendStatus(){
+        MovingEntOrder mep = new MovingEntOrder(this);
+        MemoryHandler.mh.shan.AddPacket(mep);
     }
 }

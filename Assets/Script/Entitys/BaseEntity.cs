@@ -64,5 +64,13 @@ public class BaseEntity : MonoBehaviour
     internal void FixedUpdate()
     {
         tick++;
+        if(tick < 128)
+            return;
+        tick = 0;
+        SendStatus();
+    }
+    public void SendStatus(){
+        BaseEntityPacket mep = new BaseEntityPacket(this);
+        MemoryHandler.mh.shan.AddPacket(mep);
     }
 }

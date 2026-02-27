@@ -31,18 +31,21 @@ public class PingPacket : Packet
     new public static Packet CreatePacket(int id,int index,byte[] message,int length)
     {
         PingPacket pingp = new PingPacket();
-        pingp.lastTick = BitConverter.ToInt32(message,index);
+        return pingp;
+    }
+    override public void PopulatePacket(ref int index,byte[] message,int length) {
+        lastTick = BitConverter.ToInt32(message,index);
         int counting = 0;
         counting = BitConverter.ToInt32(message,index + 4);
         index += 8;
         for(int idx = 0;idx < counting && length < idx + index; idx++)
         {
-            pingp.pingOf.Add(new Tuple<string, float>(
+            pingOf.Add(new Tuple<string, float>(
                 Packet.ConvertToString(message,ref index),
                 BitConverter.ToSingle(message,index)
                 ));
             index += 4;
         }
-        return pingp;
     }
+
 }

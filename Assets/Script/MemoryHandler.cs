@@ -40,6 +40,9 @@ public class MemoryHandler : MonoBehaviour
     }
     private void FixedUpdate(){
         mh = this;
+        if(shan == null)
+            return;
+        shan.Handel();
     }
 
     // Don't call this often
@@ -89,6 +92,28 @@ public class MemoryHandler : MonoBehaviour
 
     // true on success
     public bool ConnectToServer(IPEndPoint ipe){
+        TcpClient tcl = new TcpClient();
+        try{
+            tcl.Connect(ipe);
+        }catch(SocketException e){
+            Debug.Log(e.ErrorCode);
+            tcl.Dispose();
+            return false;
+        }
+        shan = new ServerHandler(tcl);
+        return true;
+    }
+    // true on success
+    public bool HostGame(IPEndPoint ipe){
+        TcpListener tcl = new TcpListener(ipe);
+        try{
+            tcl.Start();
+        }catch(SocketException e){
+            Debug.Log(e.ErrorCode);
+            //tcl.Dispose();
+            return false;
+        }
+        shan = new ServerHandler(tcl);
         return true;
     }
 
@@ -103,6 +128,6 @@ public class MemoryHandler : MonoBehaviour
         //SceneManager.SetActiveScene(SceneManager.GetSceneByName(sc));
         //SceneManager.UnloadSceneAsync(currentScene);
 
-        Debug.Log(sc);
+        //Debug.Log(sc);
     }
 }

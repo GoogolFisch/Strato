@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Net;
+using System.Globalization;
 
 public class MainMenu : MonoBehaviour
 {
     public static MainMenu mm;
     public InputField insertName;
     public InputField insertIp;
+    public InputField insertPort;
     public Text ipErrorText;
     void Awake(){
         mm = this;
@@ -25,10 +27,13 @@ public class MainMenu : MonoBehaviour
         string nameNow = baseName[Random.Range(0,baseName.Length)];
         nameNow += $"{Random.Range(0,100)}";
         insertName.text = nameNow;
+        insertPort.text = $"{LanConnector.PORT}";
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        QualitySettings.vSyncCount = 0; // Set vSyncCount to 0 so that using .targetFrameRate is enabled.
+        Application.targetFrameRate = 60;
         
     }
 
@@ -41,18 +46,37 @@ public class MainMenu : MonoBehaviour
     }
 
     public void SetIp(IPEndPoint ep){
-        insertIp.text = $"{ep.Address}:{LanConnector.PORT}";
+        insertIp.text = $"{ep.Address}";
+        insertPort.text = $"{LanConnector.PORT}";
     }
 
+    public void HostGame(int port){
+        bool tstCnn = MemoryHandler.mh.HostGame(
+                new IPEndPoint(IPAddress.Any,port));
+        if(tstCnn){
+            MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
+        }
+    }
     public void JoinGame(){
-        IPEndPoint ip;
-        string error = LocalLanListener.CreateIPEndPoint(insertIp.text,out ip);
-        if(error != null && !error.Equals("")){
-            ipErrorText.text = error;
+        int port;
+        if (!int.TryParse(insertPort.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out port))
+        {
+            ipErrorText.text = "Invalid port";
             return;
         }
+        if(insertIp.text.Equals("")){
+            HostGame(port);
+            return;
+        }
+        IPEndPoint ipe;
+        IPAddress ip;
+        if (!IPAddress.TryParse(insertIp.text, out ip)){
+            ipErrorText.text = "Invalid ip-adress";
+            return;
+        }
+        ipe = new IPEndPoint(ip,port);
         ipErrorText.text = "";
-        bool tstCnn = MemoryHandler.mh.ConnectToServer(ip);
+        bool tstCnn = MemoryHandler.mh.ConnectToServer(ipe);
         if(tstCnn){
             MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
         }
