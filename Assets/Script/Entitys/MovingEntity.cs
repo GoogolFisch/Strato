@@ -89,7 +89,7 @@ public class MovingEntity : BaseEntity
         }
         redirectVel.Normalize();
         transform.position = new Vector3(transform.position.x,0,transform.position.z);
-        SendStatus();
+        MemoryHandler.mh.shan.AddPacket(SendStatus());
     }
     public void FollowEnt(BaseEntity be)
     {
@@ -106,8 +106,8 @@ public class MovingEntity : BaseEntity
         followEnt = null;
         targetPos = pos;
     }
-    public void SendStatus(){
+    new public Packet SendStatus(){
         MovingEntOrder mep = new MovingEntOrder(this);
-        MemoryHandler.mh.shan.AddPacket(mep);
+        return mep;
     }
 }

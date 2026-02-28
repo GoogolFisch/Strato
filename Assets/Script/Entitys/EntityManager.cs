@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+using System;
 using UnityEngine;
 
 public class EntityManager : MonoBehaviour
@@ -8,6 +11,10 @@ public class EntityManager : MonoBehaviour
     public BaseEntity homeBase;
     public Dictionary<long, BaseEntity> enityList = new Dictionary<long, BaseEntity>();
     public static EntityManager em;
+
+
+    [Header("Entity List")]
+    public BaseEntity[] allEntitys;
     void Awake()
     {
         em = this;
@@ -16,6 +23,10 @@ public class EntityManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+    }
+
+    public void SummonHomes(){
         float twoPi = Mathf.PI * 2;
         for(int i = 0;i < playerCount; i++)
         {
@@ -23,9 +34,25 @@ public class EntityManager : MonoBehaviour
             vpos *= baseRadius;
             BaseEntity be = Instantiate(homeBase,vpos,Quaternion.identity,transform);
             be.playerOwner = i;
-            
         }
+    }
+    public void Summon(SummonEntityPacket sep){
+        BaseEntity be = Instantiate(allEntitys[sep.entityType],
+                    sep.position,Quaternion.identity,transform);
+        be.id = sep.entId;
+        be.playerOwner = sep.ePlayerOwner;
+        be.health = sep.eHealth;
         
+        // typeof(Derived).IsSubclassOf(typeof(SomeType))
+        // typeof(SomeType).IsAssignableFrom(typeof(Derived))
+        if(sep.subPack.GetType().IsSubclassOf(typeof(BaseEntity))){
+            HandelPacket(sep);
+        }
+    }
+    public void HandelPacket(BaseEntityPacket bep){
+        Debug.Log("{2026-02-28T14:29:00}");
+    }
+    public void HandelPacket(MovingEntOrder meo){
     }
 
     // Update is called once per frame

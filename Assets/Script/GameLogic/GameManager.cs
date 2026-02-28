@@ -31,5 +31,6 @@ public class GameManager : MonoBehaviour
     {
         gm = this;
         memHand = MemoryHandler.mh;
+        //mh.Handel();
     }
 }

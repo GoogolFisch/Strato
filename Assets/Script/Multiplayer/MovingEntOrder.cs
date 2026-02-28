@@ -1,5 +1,4 @@
 using System.Net.NetworkInformation;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Collections.Generic;
@@ -17,7 +16,6 @@ public class MovingEntOrder : BaseEntityPacket
         this.id = PacketTypes.MovingEntityPacket;
         followEnt = 0;
         attackingEnt = 0;
-        currentPos = Vector3.zero;
         targetPos = Vector3.zero;
         moveVector = Vector3.zero;
     }
@@ -26,7 +24,6 @@ public class MovingEntOrder : BaseEntityPacket
         this.id = PacketTypes.MovingEntityPacket;
         followEnt = 0;
         attackingEnt = 0;
-        currentPos = me.transform.position;
         targetPos = me.targetPos;
         moveVector = me.moveVector;
     }
@@ -38,9 +35,6 @@ public class MovingEntOrder : BaseEntityPacket
         outp.AddRange(BitConverter.GetBytes(followEnt));
         outp.AddRange(BitConverter.GetBytes(attackingEnt));
 
-        outp.AddRange(BitConverter.GetBytes(currentPos.x));
-        outp.AddRange(BitConverter.GetBytes(currentPos.y));
-        outp.AddRange(BitConverter.GetBytes(currentPos.z));
         outp.AddRange(BitConverter.GetBytes(targetPos.x));
         outp.AddRange(BitConverter.GetBytes(targetPos.y));
         outp.AddRange(BitConverter.GetBytes(targetPos.z));
@@ -51,23 +45,19 @@ public class MovingEntOrder : BaseEntityPacket
         return outp;
     }
 
-    new public static Packet CreatePacket(int id,int index,byte[] message,int length)
+    new public static Packet CreatePacket(int id,int index,byte[] message,int maxIdx)
     {
         MovingEntOrder pack = new MovingEntOrder();
-        if(length + index > message.Length)return null;
-        pack.PopulatePacket(ref index,message,length);
+        if(index > maxIdx)return null;
+        pack.PopulatePacket(ref index,message,maxIdx);
         return pack;
     }
 
-    override public void PopulatePacket(ref int index,byte[] message,int length) {
-        base.PopulatePacket(ref index,message,length);
+    override public void PopulatePacket(ref int index,byte[] message,int maxIdx) {
+        base.PopulatePacket(ref index,message,maxIdx);
         followEnt = BitConverter.ToInt64(message,index);
         attackingEnt = BitConverter.ToInt64(message,index + 8);
         index += 16;
-        currentPos = new Vector3(BitConverter.ToSingle(message,index),
-                        BitConverter.ToSingle(message,index + 4),
-                        BitConverter.ToSingle(message,index + 8));
-        index += 12;
         targetPos = new Vector3(BitConverter.ToSingle(message,index),
                         BitConverter.ToSingle(message,index + 4),
                         BitConverter.ToSingle(message,index + 8));
@@ -79,4 +69,7 @@ public class MovingEntOrder : BaseEntityPacket
 
     }
 
+    override public void ActUppon(){
+        //EntityManager.em.Summon(this);
+    }
 }

@@ -28,17 +28,17 @@ public class PingPacket : Packet
         return outp;
     }
 
-    new public static Packet CreatePacket(int id,int index,byte[] message,int length)
+    new public static Packet CreatePacket(int id,int index,byte[] message,int maxIdx)
     {
         PingPacket pingp = new PingPacket();
         return pingp;
     }
-    override public void PopulatePacket(ref int index,byte[] message,int length) {
+    override public void PopulatePacket(ref int index,byte[] message,int maxIdx) {
         lastTick = BitConverter.ToInt32(message,index);
         int counting = 0;
         counting = BitConverter.ToInt32(message,index + 4);
         index += 8;
-        for(int idx = 0;idx < counting && length < idx + index; idx++)
+        for(int idx = 0;idx < counting && maxIdx > idx + index; idx++)
         {
             pingOf.Add(new Tuple<string, float>(
                 Packet.ConvertToString(message,ref index),
@@ -48,4 +48,6 @@ public class PingPacket : Packet
         }
     }
 
+    override public void ActUppon(){
+    }
 }

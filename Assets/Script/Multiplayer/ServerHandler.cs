@@ -36,11 +36,20 @@ public class ServerHandler
         if (clCons == null)
             dirServerCon.Handel();
         else
+        {
             foreach(DirConnection dc in clCons)
                 dc.Handel();
+            if(serverSocket.Pending()){
+                TcpClient tcpClient = serverSocket.AcceptTcpClient();
+                DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
+                clCons.Add(new DirConnection(tcpClient));
+            }
+        }
     }
+
     public void AddPacket(Packet p)
     {
+        DeLogger.dl.Log($"{p}");
         if (clCons == null)
             dirServerCon.AddOutgoingPacket(p);
         else

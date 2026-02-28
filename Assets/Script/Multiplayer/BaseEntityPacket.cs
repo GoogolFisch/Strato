@@ -7,6 +7,7 @@ public class BaseEntityPacket : Packet
 {
     public long entId;
     public float eHealth;
+    public Vector3 position;
     //public int ePlayerOwner;
     public int eTick;
 
@@ -16,6 +17,7 @@ public class BaseEntityPacket : Packet
         entId = 0;
         eHealth = 0;
         //ePlayerOwner = -1;
+        position = Vector3.zero;
         eTick = 0;
     }
     public BaseEntityPacket(BaseEntity me) : base()
@@ -24,6 +26,7 @@ public class BaseEntityPacket : Packet
         entId = me.id;
         eHealth = me.health;
         //ePlayerOwner = me.playerOwner;
+        position = me.transform.position;
         eTick = me.tick;
     }
 
@@ -34,6 +37,9 @@ public class BaseEntityPacket : Packet
         outp.AddRange(BitConverter.GetBytes(eHealth));
         //outp.AddRange(BitConverter.GetBytes(ePlayerOwner));
         outp.AddRange(BitConverter.GetBytes(eTick));
+        outp.AddRange(BitConverter.GetBytes(position.x));
+        outp.AddRange(BitConverter.GetBytes(position.y));
+        outp.AddRange(BitConverter.GetBytes(position.z));
         outp.AddRange(base.PacketData());
         return outp;
     }
@@ -52,6 +58,10 @@ public class BaseEntityPacket : Packet
         //ePlayerOwner = BitConverter.ToInt32(message,index + 12);
         eTick = BitConverter.ToInt32(message,index + 20);
         index += 24;
+        position = new Vector3( BitConverter.ToSingle(message,index + 4),
+                BitConverter.ToSingle(message,index + 4),
+                BitConverter.ToSingle(message,index + 4));
+        index += 12;
     }
 
 }

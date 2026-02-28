@@ -12,5 +12,4 @@ public enum PacketTypes
     SummonEntityPacket,
 
     PackUp,
-    
 }

@@ -25,6 +25,10 @@ public class BaseEntity : MonoBehaviour
         {
             collideLayer = LayerMask.NameToLayer("Selectable");
             moveToLayer(collideLayer);
+
+
+            SummonEntityPacket mep = new SummonEntityPacket(this);
+            MemoryHandler.mh.shan.AddPacket(mep);
         }
         else if(playerOwner > 0)
         {
@@ -67,10 +71,10 @@ public class BaseEntity : MonoBehaviour
         if(tick < 128)
             return;
         tick = 0;
-        SendStatus();
+        MemoryHandler.mh.shan.AddPacket(SendStatus());
     }
-    public void SendStatus(){
+    public Packet SendStatus(){
         BaseEntityPacket mep = new BaseEntityPacket(this);
-        MemoryHandler.mh.shan.AddPacket(mep);
+        return mep;
     }
 }

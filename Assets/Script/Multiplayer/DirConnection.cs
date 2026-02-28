@@ -53,6 +53,7 @@ public class DirConnection
             addedPack = Packet.ParsePacket(message,ref index);
             //if(delta > 0 || addedPack.keepIfOrderMism())
                 pack.Add(addedPack);
+            DeLogger.dl.Log($"{addedPack}");
         }while(addedPack != null);
         prevBytes = barr.GetRange(index,barr.Count - index).ToArray();
 

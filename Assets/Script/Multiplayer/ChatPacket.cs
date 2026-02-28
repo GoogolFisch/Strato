@@ -21,16 +21,18 @@ public class ChatPacket : Packet
         return outp;
     }
 
-    new public static Packet CreatePacket(int id,int index,byte[] message,int length)
+    new public static Packet CreatePacket(int id,int index,byte[] message,int maxIdx)
     {
         ChatPacket pingp = new ChatPacket();
-        pingp.PopulatePacket(ref index,message,length);
+        pingp.PopulatePacket(ref index,message,maxIdx);
         return pingp;
     }
-    override public void PopulatePacket(ref int index,byte[] message,int length) {
+    override public void PopulatePacket(ref int index,byte[] message,int maxIdx) {
         playerName = Packet.ConvertToString(message,ref index);
         playerMessage = Packet.ConvertToString(message,ref index);
 
     }
 
+    override public void ActUppon(){
+    }
 }
