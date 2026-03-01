@@ -8,6 +8,7 @@ public class DirConnection : IDisposable
 {
     public byte[] symkey;
     internal byte[] prevBytes;
+    public bool alive;
     public Socket sock;
     public TcpClient tcpCl;
     public EndPoint point;
@@ -23,6 +24,7 @@ public class DirConnection : IDisposable
         outgoingPackets = new List<Packet>();
         incommingPackets = new List<Packet>();
         prevBytes = new byte[0];
+        alive = true;
     }
     public DirConnection(TcpClient sock)
     {
@@ -33,6 +35,7 @@ public class DirConnection : IDisposable
         outgoingPackets = new List<Packet>();
         incommingPackets = new List<Packet>();
         prevBytes = new byte[0];
+        alive = true;
     }
     public void Dispose(){
         tcpCl.Close();
@@ -57,9 +60,10 @@ public class DirConnection : IDisposable
         Packet addedPack = null;
         do{
             addedPack = Packet.ParsePacket(message,ref index);
+            if(addedPack == null)break;
             //if(delta > 0 || addedPack.keepIfOrderMism())
                 pack.Add(addedPack);
-            DeLogger.dl.Log($"{addedPack}");
+            DeLogger.dl.Log($"{addedPack.GetType()} {addedPack}");
         }while(addedPack != null);
         prevBytes = barr.GetRange(index,barr.Count - index).ToArray();
 
@@ -135,7 +139,11 @@ public class DirConnection : IDisposable
         if(symkey != null)enc = Encrypt(bufOut,symkey);
         if(enc.Length > 0){
             DeLogger.dl.Log($"{enc}:{enc.Length}");
-            sock.Send(enc);
+            try{
+                sock.Send(enc);
+            }catch(SocketException se){
+                alive = false;
+            }
         }
         return;
     }
@@ -149,6 +157,9 @@ public class DirConnection : IDisposable
     {
         return incommingPackets[0];
     }
+    public bool HasIncomming(){
+        return incommingPackets.Count > 0;
+    }
 
     public void Handel()
     {
@@ -158,7 +169,6 @@ public class DirConnection : IDisposable
         //EndPoint remote = null;
         while (tcpCl.Available > 0)
         {
-            DeLogger.dl.Log($"Data: {sock.Available}");
             sock.Receive(buffer);
             if(symkey != null)
                 buffer = Decrypt(buffer,symkey);

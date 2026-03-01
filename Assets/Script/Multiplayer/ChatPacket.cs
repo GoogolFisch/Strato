@@ -12,19 +12,19 @@ public class ChatPacket : Packet
     {
         this.id = PacketTypes.ChatPacket;
         playerName = GameManager.gm.playerName;
-        playerName = "playerMessage";
+        playerMessage = "playerMessage";
     }
     public ChatPacket(string msg)
     {
         this.id = PacketTypes.ChatPacket;
         playerName = GameManager.gm.playerName;
-        playerName = msg;
+        playerMessage = msg;
     }
     public ChatPacket(string pl,string msg)
     {
         this.id = PacketTypes.ChatPacket;
         playerName = pl;
-        playerName = msg;
+        playerMessage = msg;
     }
 
     override public List<byte> PacketData()

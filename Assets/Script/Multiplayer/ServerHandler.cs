@@ -33,19 +33,50 @@ public class ServerHandler : IDisposable
 
     public void Handel()
     {
-        if (clCons == null)
+        int count = 32;
+        while(HandelPacket())
+            count--;
+    }
+    public bool HandelPacket(){
+        bool succ = false;
+        if (clCons == null){
             dirServerCon.Handel();
-        else
-        {
-            foreach(DirConnection dc in clCons)
-                dc.Handel();
-            //serverSocket.Start(5);
-            if(serverSocket.Pending()){
-                TcpClient tcpClient = serverSocket.AcceptTcpClient();
-                DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
-                clCons.Add(new DirConnection(tcpClient));
+            if(dirServerCon.HasIncomming()){
+                Packet pck = dirServerCon.PopIncommingPacket();
+                pck.ActUppon();
+                succ = true;
+            }
+            return succ;
+        }
+        // server side====
+        foreach(DirConnection dc in clCons)
+            dc.Handel();
+        //serverSocket.Start(5);
+        if(serverSocket.Pending()){
+            TcpClient tcpClient = serverSocket.AcceptTcpClient();
+            DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
+            clCons.Add(new DirConnection(tcpClient));
+        }
+        foreach(DirConnection dc in clCons){
+            if(dc.HasIncomming()){
+                succ = true;
+
+                Packet pck = dc.PopIncommingPacket();
+                pck.ActUppon();
+                if(pck.GetType() != typeof(PingPacket))continue;
+                foreach(DirConnection dc2 in clCons){
+                    if(dc2 == dc)continue;
+                    dc2.AddOutgoingPacket(pck);
+                }
             }
         }
+        for(int i = 0;i < clCons.Count;i++){
+            if(clCons[i].alive)continue;
+            clCons[i].Dispose();
+            clCons.RemoveAt(i);
+            i--;
+        }
+        return succ;
     }
 
     public void AddPacket(Packet p)

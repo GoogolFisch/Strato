@@ -55,7 +55,7 @@ public class MainMenu : MonoBehaviour
         bool tstCnn = MemoryHandler.mh.HostGame(
                 new IPEndPoint(IPAddress.Any,port));
         if(!tstCnn)return;
-        if(!int.TryParse(insertPlayerCount.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out port)){
+        if(!int.TryParse(insertPlayerCount.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out MemoryHandler.mh.maxPlCnt)){
             //MemoryHandler.mh.maxPlCnt
         }
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);

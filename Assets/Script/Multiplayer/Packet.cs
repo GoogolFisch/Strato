@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Data.Common;
+using UnityEngine;
 
 
 public class Packet
@@ -65,20 +66,29 @@ public class Packet
     public static Packet ParsePacket(byte[] message,ref int index,int maxLen = -1)
     {
         if(maxLen < 0)maxLen = message.Length;
-        if(index + 8 < message.Length)return null;
+        if(index + 8 > message.Length){
+            Debug.Log($"there a'int space  {index} {message.Length}");
+            return null;
+        }
         int length = BitConverter.ToInt32(message,index);
         int id = BitConverter.ToInt32(message,index + 4);
-        if(length + index >= message.Length)return null;
+        if(length + index > message.Length){
+            Debug.Log("there isn't space for the two of us {length} + {index} > {message.Length}");
+            return null;
+        }
         index += 8;
         if(possible.Count < id)return new Packet(id);
         if(id < 0)return new Packet(id);
         //
-        if(id == 0 && length == 0)return null;
+        if(id == 0 && length == 0){
+            Debug.Log("there a'int a packet here");
+            return null;
+        }
         //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
         //Packet pout = (Packet)possible[id](id,index,message,length);
         Packet pout = (Packet)((
             possible[id].GetConstructor(new Type[0])
-                ).Invoke(new Object[0]));
+                ).Invoke(new System.Object[0]));
         int putIndex = index;
         pout.PopulatePacket(ref putIndex,message,length);
         index += length;
