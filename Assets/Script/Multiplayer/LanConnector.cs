@@ -113,7 +113,8 @@ public class LanConnector : IDisposable
 
                 while (_isBroadcasting)
                 {
-                    Debug.Log("BRD");
+                    if(DeLogger.dl != null)
+                        DeLogger.dl.Log("BRD");
                     senderSocket.Send(sessionInformation, sessionInformation.Length, ipEndPoint);
                     await Task.Delay(TimeSpan.FromSeconds(broadcastInterval));
                 }

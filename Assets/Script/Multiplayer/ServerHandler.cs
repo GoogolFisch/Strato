@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Net;
 
-public class ServerHandler
+public class ServerHandler : IDisposable
 {
     //public List<byte[]> fetchedInternet;
     public TcpListener serverSocket;
@@ -55,5 +55,18 @@ public class ServerHandler
         else
             foreach(DirConnection dc in clCons)
                 dc.AddOutgoingPacket(p);
+    }
+    public void Dispose(){
+        if(dirServerCon != null){
+            dirServerCon.Dispose();
+        }
+        if(clCons != null){
+            foreach(DirConnection dc in clCons)
+                dc.Dispose();
+        }
+        if(serverSocket != null){
+            serverSocket.Stop();
+            //serverSocket.Dispose();
+        }
     }
 }

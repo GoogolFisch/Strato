@@ -89,6 +89,8 @@ public class MemoryHandler : MonoBehaviour
             broadcastSender.Dispose();
         if(udpLan != null)
             udpLan.Dispose();
+        if(shan != null)
+            shan.Dispose();
         if(!created)return;
     }
 

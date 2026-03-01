@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Net.Sockets;
 
-public class DirConnection
+public class DirConnection : IDisposable
 {
     public byte[] symkey;
     internal byte[] prevBytes;
@@ -33,6 +33,12 @@ public class DirConnection
         outgoingPackets = new List<Packet>();
         incommingPackets = new List<Packet>();
         prevBytes = new byte[0];
+    }
+    public void Dispose(){
+        tcpCl.Close();
+        sock.Close();
+        tcpCl.Dispose();
+        sock.Dispose();
     }
     
     public List<Packet> getPackets(byte[] later)
@@ -106,24 +112,31 @@ public class DirConnection
     }
     public void FlushOutgoingPacket()
     {
-        const int BufferSize = 4000;
+        const int BufferSize = 8000;
         List<byte> outgoing = new List<byte>();
         while (true)
         {
+            bool doBreak = true;
             int off = 0;
-            for(off = 0;off < 8;off++){
+            for(off = 0;off < 8 && off < outgoingPackets.Count;off++){
                 Packet pack = outgoingPackets[off];
                 byte[] buf = pack.PackPacket();
                 if(outgoing.Count + buf.Length > BufferSize)
                     break;
+                outgoing.AddRange(buf);
+                doBreak = false;
                 outgoingPackets.RemoveAt(off);
             }
-            if(off == 8)
+            if(doBreak)
                 break;
         }
         byte[] bufOut = outgoing.ToArray();
-        byte[] enc = Encrypt(bufOut,symkey);
-        sock.Send(enc);
+        byte[] enc = bufOut;
+        if(symkey != null)enc = Encrypt(bufOut,symkey);
+        if(enc.Length > 0){
+            DeLogger.dl.Log($"{enc}:{enc.Length}");
+            sock.Send(enc);
+        }
         return;
     }
     public Packet PopIncommingPacket()
@@ -139,15 +152,19 @@ public class DirConnection
 
     public void Handel()
     {
+        if(!sock.Connected)
+            DeLogger.dl.Log("DC-!AC");
         byte[] buffer = new byte[sock.Available];
         //EndPoint remote = null;
-        while (sock.Available > 0)
+        while (tcpCl.Available > 0)
         {
+            DeLogger.dl.Log($"Data: {sock.Available}");
             sock.Receive(buffer);
             if(symkey != null)
                 buffer = Decrypt(buffer,symkey);
             List<Packet> packets = getPackets(buffer);
             incommingPackets.AddRange(packets);
         }
+        FlushOutgoingPacket();
     }
 }

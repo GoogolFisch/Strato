@@ -29,6 +29,7 @@ public class LocalLanListener : MonoBehaviour
         IPEndPoint eps;
         byte[] arr;
         (eps,arr) = MemoryHandler.mh.GetLocalGames();
+        Debug.Log($"${eps},{arr}");
         if(eps == null)return;
         if(arr == null)return;
         IPEndPoint iterEp;
