@@ -39,6 +39,7 @@ public class ServerHandler : IDisposable
         {
             foreach(DirConnection dc in clCons)
                 dc.Handel();
+            //serverSocket.Start(5);
             if(serverSocket.Pending()){
                 TcpClient tcpClient = serverSocket.AcceptTcpClient();
                 DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
@@ -49,7 +50,6 @@ public class ServerHandler : IDisposable
 
     public void AddPacket(Packet p)
     {
-        DeLogger.dl.Log($"{p}");
         if (clCons == null)
             dirServerCon.AddOutgoingPacket(p);
         else

@@ -32,8 +32,14 @@ public class LanConnector : IDisposable
         List<byte> barr = new List<byte>();
         barr.AddRange(BitConverter.GetBytes(VERSION));
         barr.AddRange(Packet.ConvertFromString(str));
-        barr.AddRange(BitConverter.GetBytes(VERSION));
-        barr.AddRange(BitConverter.GetBytes(VERSION));
+        List<DirConnection> ldc = MemoryHandler.mh.shan.clCons;
+        if(ldc != null){
+            barr.AddRange(BitConverter.GetBytes(MemoryHandler.mh.shan.clCons.Count));
+            barr.AddRange(BitConverter.GetBytes(MemoryHandler.mh.maxPlCnt));
+        }else{
+            barr.AddRange(BitConverter.GetBytes(0));
+            barr.AddRange(BitConverter.GetBytes(0));
+        }
         
         return barr.ToArray();
     }
@@ -110,12 +116,14 @@ public class LanConnector : IDisposable
             using (var senderSocket = new UdpClient())
             {
                 senderSocket.EnableBroadcast = true;
+                senderSocket.MulticastLoopback = true;
 
                 while (_isBroadcasting)
                 {
                     if(DeLogger.dl != null)
-                        DeLogger.dl.Log("BRD");
-                    senderSocket.Send(sessionInformation, sessionInformation.Length, ipEndPoint);
+                        DeLogger.dl.Log($"BRD {ipEndPoint}");
+                    senderSocket.Send(sessionInformation,
+                        sessionInformation.Length, ipEndPoint);
                     await Task.Delay(TimeSpan.FromSeconds(broadcastInterval));
                 }
             }

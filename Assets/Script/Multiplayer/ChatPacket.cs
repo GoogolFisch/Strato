@@ -11,6 +11,20 @@ public class ChatPacket : Packet
     public ChatPacket()
     {
         this.id = PacketTypes.ChatPacket;
+        playerName = GameManager.gm.playerName;
+        playerName = "playerMessage";
+    }
+    public ChatPacket(string msg)
+    {
+        this.id = PacketTypes.ChatPacket;
+        playerName = GameManager.gm.playerName;
+        playerName = msg;
+    }
+    public ChatPacket(string pl,string msg)
+    {
+        this.id = PacketTypes.ChatPacket;
+        playerName = pl;
+        playerName = msg;
     }
 
     override public List<byte> PacketData()
@@ -34,5 +48,6 @@ public class ChatPacket : Packet
     }
 
     override public void ActUppon(){
+        DeLogger.dl.Log($"[{playerName}]:{playerMessage}");
     }
 }

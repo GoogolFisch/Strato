@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public int currentTeam;
     public MemoryHandler memHand;
     public UIManager uiMan;
-    public string roomName = "name";
+    public string playerName = "name";
     GroundState gs;
     void Awake(){
         gm = this;
@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         memHand = MemoryHandler.mh;
+        playerName = memHand.plName;
+        memHand.shan.AddPacket(new ChatPacket(""));
     }
     
     public void RegisterGroundService(GroundState gs){

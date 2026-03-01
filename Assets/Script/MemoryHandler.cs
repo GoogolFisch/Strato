@@ -15,9 +15,12 @@ public class MemoryHandler : MonoBehaviour
     public LanConnector udpLan;
     public ServerHandler shan;
 
+
     public const string scMenu = "MainMenu";
     public const string scGame = "GameScene";
 
+    public string plName = "name";
+    public int maxPlCnt = 4;
 
     Task<(IPEndPoint,byte[])> udpListenerTask;
     Task broadcastSender;
@@ -82,6 +85,9 @@ public class MemoryHandler : MonoBehaviour
 
     void OnDestroy()
     {
+        Debug.Log("MemHand-Destroy?");
+        if(DeLogger.dl != null)
+            DeLogger.dl.Log("MemHand-Destroy?");
         /*
         if(udpListenerTask != null)
             udpListenerTask.Dispose(); // */
@@ -101,6 +107,7 @@ public class MemoryHandler : MonoBehaviour
             tcl.Connect(ipe);
         }catch(SocketException e){
             Debug.Log(e.ErrorCode);
+            MainMenu.mm.ipErrorText.text = $"{e.Message}\n{e}";
             tcl.Dispose();
             return false;
         }
@@ -114,6 +121,7 @@ public class MemoryHandler : MonoBehaviour
             tcl.Start();
         }catch(SocketException e){
             Debug.Log(e.ErrorCode);
+            MainMenu.mm.ipErrorText.text = $"{e}";
             //tcl.Dispose();
             return false;
         }

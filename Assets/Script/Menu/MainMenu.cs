@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public InputField insertName;
     public InputField insertIp;
     public InputField insertPort;
+    public InputField insertPlayerCount;
     public Text ipErrorText;
     void Awake(){
         mm = this;
@@ -54,11 +55,15 @@ public class MainMenu : MonoBehaviour
         bool tstCnn = MemoryHandler.mh.HostGame(
                 new IPEndPoint(IPAddress.Any,port));
         if(!tstCnn)return;
+        if(!int.TryParse(insertPlayerCount.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out port)){
+            //MemoryHandler.mh.maxPlCnt
+        }
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
         MemoryHandler.mh.StartBoradCasting("Hello");
     }
     public void JoinGame(){
         int port;
+        MemoryHandler.mh.plName = insertName.text;
         if (!int.TryParse(insertPort.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out port))
         {
             ipErrorText.text = "Invalid port";
@@ -68,6 +73,7 @@ public class MainMenu : MonoBehaviour
             HostGame(port);
             return;
         }
+        //MemoryHandler.mh.maxPlCnt = insertPlayerCount.text;
         IPEndPoint ipe;
         IPAddress ip;
         if (!IPAddress.TryParse(insertIp.text, out ip)){
@@ -77,8 +83,9 @@ public class MainMenu : MonoBehaviour
         ipe = new IPEndPoint(ip,port);
         ipErrorText.text = "";
         bool tstCnn = MemoryHandler.mh.ConnectToServer(ipe);
-        if(tstCnn){
-            MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
+        if(!tstCnn){
+            return;
         }
+        MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
     }
 }
