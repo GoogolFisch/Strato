@@ -30,7 +30,8 @@ public class EntityManager : MonoBehaviour
         float twoPi = Mathf.PI * 2;
         for(int i = 0;i < playerCount; i++)
         {
-            Vector3 vpos = new Vector3(Mathf.Sin(twoPi * i / playerCount),0,Mathf.Cos(twoPi * i / playerCount));
+            Vector3 vpos = new Vector3(Mathf.Sin(twoPi * i / playerCount),
+                        0,Mathf.Cos(twoPi * i / playerCount));
             vpos *= baseRadius;
             BaseEntity be = Instantiate(homeBase,vpos,Quaternion.identity,transform);
             be.playerOwner = i;

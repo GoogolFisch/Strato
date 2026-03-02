@@ -18,6 +18,7 @@ public class MemoryHandler : MonoBehaviour
 
     public const string scMenu = "MainMenu";
     public const string scGame = "GameScene";
+    private string lastGScene = "";
 
     public string plName = "name";
     public int maxPlCnt = 4;
@@ -86,8 +87,6 @@ public class MemoryHandler : MonoBehaviour
     void OnDestroy()
     {
         Debug.Log("MemHand-Destroy?");
-        if(DeLogger.dl != null)
-            DeLogger.dl.Log("MemHand-Destroy?");
         /*
         if(udpListenerTask != null)
             udpListenerTask.Dispose(); // */
@@ -119,6 +118,9 @@ public class MemoryHandler : MonoBehaviour
         TcpListener tcl = new TcpListener(ipe);
         try{
             tcl.Start();
+            if(tcl.LocalEndpoint.GetType().IsSubclassOf(typeof(IPEndPoint))){
+                udpLan.portService = ((IPEndPoint)tcl.LocalEndpoint).Port;
+            }
         }catch(SocketException e){
             Debug.Log(e.ErrorCode);
             MainMenu.mm.ipErrorText.text = $"{e}";
@@ -130,8 +132,13 @@ public class MemoryHandler : MonoBehaviour
     }
 
     public void SetActiveScene(string sc){
+        if(lastGScene == sc){
+            throw new Exception("Shouldn't load same scene twice!");
+        }
         //Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(sc);
+        lastGScene = sc;
+        DontDestroyOnLoad(this.gameObject);
         //var newScene = SceneManager.CreateScene("GameScene",LoadSceneMode.Single);
         /*SceneManager.UnloadSceneAsync("MainMenu");
         SceneManager.OpenScene("GameScene", LoadSceneMode.Additive); //  */
@@ -141,5 +148,9 @@ public class MemoryHandler : MonoBehaviour
         //SceneManager.UnloadSceneAsync(currentScene);
 
         //Debug.Log(sc);
+    }
+
+    public void GameConnectionFailed(){
+        SetActiveScene(scMenu);
     }
 }

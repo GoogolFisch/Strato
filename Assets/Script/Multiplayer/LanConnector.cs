@@ -10,7 +10,9 @@ using UnityEngine;
 public class LanConnector : IDisposable
 {
     public const int PORT = 25359;
+    public const int PORT_DOWN = 25350;
     private readonly int _port;
+    public int portService;
     // volitile?
     private bool _isBroadcasting;
     private UdpClient _udpClient;
@@ -19,6 +21,7 @@ public class LanConnector : IDisposable
     public LanConnector(int port = PORT)
     {
         _port = port;
+        portService = PORT_DOWN;
     }
     public void Dispose()
     {
@@ -113,7 +116,7 @@ public class LanConnector : IDisposable
         {
             //var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
             var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
-            using (var senderSocket = new UdpClient())
+            using (var senderSocket = new UdpClient(portService))
             {
                 senderSocket.EnableBroadcast = true;
                 senderSocket.MulticastLoopback = true;

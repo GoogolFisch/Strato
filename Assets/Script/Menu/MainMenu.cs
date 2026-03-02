@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
 
     public void SetIp(IPEndPoint ep){
         insertIp.text = $"{ep.Address}";
-        insertPort.text = $"{LanConnector.PORT}";
+        insertPort.text = $"{ep.Port}";
     }
 
     public void HostGame(int port){

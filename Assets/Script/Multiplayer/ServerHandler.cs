@@ -46,8 +46,13 @@ public class ServerHandler : IDisposable
                 pck.ActUppon();
                 succ = true;
             }
-            return succ;
+            if(dirServerCon.alive)
+                return succ;
+            Debug.Log("Helo Wsfa");
+            MemoryHandler.mh.GameConnectionFailed();
+            return false;
         }
+
         // server side====
         foreach(DirConnection dc in clCons)
             dc.Handel();
@@ -63,7 +68,7 @@ public class ServerHandler : IDisposable
 
                 Packet pck = dc.PopIncommingPacket();
                 pck.ActUppon();
-                if(pck.GetType() != typeof(PingPacket))continue;
+                if(pck.GetType() == typeof(PingPacket))continue;
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
