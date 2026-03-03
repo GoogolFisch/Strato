@@ -9,7 +9,7 @@ public class EntityManager : MonoBehaviour
     public int playerCount = 2;
     public float baseRadius = 2;
     public BaseEntity homeBase;
-    public Dictionary<long, BaseEntity> enityList = new Dictionary<long, BaseEntity>();
+    public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
     public static EntityManager em;
 
 
@@ -38,6 +38,7 @@ public class EntityManager : MonoBehaviour
         }
     }
     public void Summon(SummonEntityPacket sep){
+        Debug.Log($"type:{sep.entityType}");
         BaseEntity be = Instantiate(allEntitys[sep.entityType],
                     sep.position,Quaternion.identity,transform);
         be.id = sep.entId;
@@ -118,7 +119,12 @@ public class EntityManager : MonoBehaviour
     }
     public void DoSelectGround(Vector3 hit)
     {
-        if(selectedEnt == null)return;
+        if(selectedEnt == null){
+            Debug.Log("Make Obj?");
+            BaseEntity be = Instantiate(allEntitys[0],hit,Quaternion.identity,transform);
+            be.playerOwner = GameManager.gm.currentTeam;
+            return;
+        }
         if(selectedEnt.GetType() == typeof(MovingEntity))
         {
             MovingEntity ment = (MovingEntity)selectedEnt;
@@ -129,7 +135,7 @@ public class EntityManager : MonoBehaviour
     {
         // TODO make faster
         List<BaseEntity> bent = new List<BaseEntity>();
-        foreach(long i in enityList.Keys)
+        foreach(ulong i in enityList.Keys)
         {
             BaseEntity be = enityList[i];
             float dist = Vector3.Distance(pos,be.transform.position);

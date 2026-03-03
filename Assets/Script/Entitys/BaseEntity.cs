@@ -3,7 +3,7 @@ using UnityEngine;
 public class BaseEntity : MonoBehaviour
 {
 
-    public long id = 0;
+    public ulong id = 0;
     public float health;
     public float baseHealth;
     public int playerOwner;
@@ -14,11 +14,21 @@ public class BaseEntity : MonoBehaviour
     {
         if(id == 0)
         {
-            id = Random.Range(0,0x10000) + (Random.Range(0,0x10000) <<16);
+            id = (ulong)Random.Range(0,0x10000);
+            id <<= 16;
+            id |= (ulong)Random.Range(0,0x10000);
+            id <<= 16;
+            id |= (ulong)Random.Range(0,0x10000);
+            id <<= 16;
+            id |= (ulong)Random.Range(0,0x10000);
         }
     }
     internal void Start()
     {
+        if(EntityManager.em.enityList.ContainsKey(id)){
+            Destroy(gameObject);
+            return;
+        }
         EntityManager.em.enityList.Add(id,this);
         int collideLayer;
         if(playerOwner == GameManager.gm.currentTeam)

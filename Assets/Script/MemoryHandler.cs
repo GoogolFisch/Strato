@@ -133,6 +133,8 @@ public class MemoryHandler : MonoBehaviour
 
     public void SetActiveScene(string sc){
         if(lastGScene == sc){
+            Debug.Log("Shouldn't load same scene twice!");
+            return;
             throw new Exception("Shouldn't load same scene twice!");
         }
         //Scene currentScene = SceneManager.GetActiveScene();
@@ -152,5 +154,6 @@ public class MemoryHandler : MonoBehaviour
 
     public void GameConnectionFailed(){
         SetActiveScene(scMenu);
+        shan = null;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BaseEntityPacket : Packet
 {
-    public long entId;
+    public ulong entId;
     public float eHealth;
     public Vector3 position;
     //public int ePlayerOwner;
@@ -33,6 +33,7 @@ public class BaseEntityPacket : Packet
     override public List<byte> PacketData()
     {
         List<byte> outp = new List<byte>();
+        outp.AddRange(base.PacketData());
         outp.AddRange(BitConverter.GetBytes(entId));
         outp.AddRange(BitConverter.GetBytes(eHealth));
         //outp.AddRange(BitConverter.GetBytes(ePlayerOwner));
@@ -40,7 +41,6 @@ public class BaseEntityPacket : Packet
         outp.AddRange(BitConverter.GetBytes(position.x));
         outp.AddRange(BitConverter.GetBytes(position.y));
         outp.AddRange(BitConverter.GetBytes(position.z));
-        outp.AddRange(base.PacketData());
         return outp;
     }
 
@@ -53,15 +53,26 @@ public class BaseEntityPacket : Packet
     }
     override public void PopulatePacket(ref int index,byte[] message,int length) {
         base.PopulatePacket(ref index,message,length);
-        entId = BitConverter.ToInt64(message,index);
+        entId = BitConverter.ToUInt64(message,index);
         eHealth = BitConverter.ToSingle(message,index + 8);
         //ePlayerOwner = BitConverter.ToInt32(message,index + 12);
-        eTick = BitConverter.ToInt32(message,index + 20);
-        index += 24;
-        position = new Vector3( BitConverter.ToSingle(message,index + 4),
+        eTick = BitConverter.ToInt32(message,index + 12);
+        index += 16;
+        position = new Vector3( BitConverter.ToSingle(message,index),
                 BitConverter.ToSingle(message,index + 4),
-                BitConverter.ToSingle(message,index + 4));
+                BitConverter.ToSingle(message,index + 8));
         index += 12;
     }
 
+    override public void ActUppon(){
+        if(!EntityManager.em.enityList.ContainsKey(entId))return;
+        BaseEntity beI = EntityManager.em.enityList[entId];
+        ActUppon(beI);
+    }
+
+    public void ActUppon(BaseEntity beI){
+        beI.health = eHealth;
+        beI.transform.position = position;
+        beI.tick = eTick;
+    }
 }

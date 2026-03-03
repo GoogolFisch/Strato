@@ -34,7 +34,7 @@ public class ServerHandler : IDisposable
     public void Handel()
     {
         int count = 32;
-        while(HandelPacket())
+        while(HandelPacket() && count > 0)
             count--;
     }
     public bool HandelPacket(){
@@ -60,7 +60,9 @@ public class ServerHandler : IDisposable
         if(serverSocket.Pending()){
             TcpClient tcpClient = serverSocket.AcceptTcpClient();
             DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
-            clCons.Add(new DirConnection(tcpClient));
+            DirConnection dcNew = new DirConnection(tcpClient);
+            InitSockConn(dcNew);
+            clCons.Add(dcNew);
         }
         foreach(DirConnection dc in clCons){
             if(dc.HasIncomming()){
@@ -84,6 +86,15 @@ public class ServerHandler : IDisposable
         return succ;
     }
 
+    public void InitSockConn(DirConnection dc){
+        foreach(var item in EntityManager.em.enityList)
+        {
+            // item.Key, item.Value
+            dc.AddOutgoingPacket(new SummonEntityPacket(item.Value));
+        }
+        dc.FlushOutgoingPacket();
+    }
+
     public void AddPacket(Packet p)
     {
         if (clCons == null)
@@ -104,5 +115,8 @@ public class ServerHandler : IDisposable
             serverSocket.Stop();
             //serverSocket.Dispose();
         }
+        serverSocket = null;
+        clCons = null;
+        dirServerCon = null;
     }
 }

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 public class MovingEntOrder : BaseEntityPacket
 {
-    public long followEnt;
-    public long attackingEnt;
+    public ulong followEnt;
+    public ulong attackingEnt;
     public Vector3 currentPos;
     public Vector3 targetPos;
     public Vector3 moveVector;
@@ -55,8 +55,8 @@ public class MovingEntOrder : BaseEntityPacket
 
     override public void PopulatePacket(ref int index,byte[] message,int maxIdx) {
         base.PopulatePacket(ref index,message,maxIdx);
-        followEnt = BitConverter.ToInt64(message,index);
-        attackingEnt = BitConverter.ToInt64(message,index + 8);
+        followEnt = BitConverter.ToUInt64(message,index);
+        attackingEnt = BitConverter.ToUInt64(message,index + 8);
         index += 16;
         targetPos = new Vector3(BitConverter.ToSingle(message,index),
                         BitConverter.ToSingle(message,index + 4),
@@ -70,6 +70,23 @@ public class MovingEntOrder : BaseEntityPacket
     }
 
     override public void ActUppon(){
-        //EntityManager.em.Summon(this);
+        if(!EntityManager.em.enityList.ContainsKey(entId)){
+            Debug.Log("Argh! Why doesn't this exists?");
+            return;
+        }
+        BaseEntity beI = EntityManager.em.enityList[entId];
+        if(!beI.GetType().IsSubclassOf(typeof(MovingEntity)))return;
+        MovingEntity meI = (MovingEntity)beI;
+        ActUppon(meI);
+    }
+    public void ActUppon(MovingEntity meI){
+        meI.targetEnt = EntityManager.em.enityList[attackingEnt];
+        meI.followEnt = EntityManager.em.enityList[followEnt];
+        meI.targetPos = targetPos;
+        meI.moveVector = moveVector;
+
+        Debug.Log($"{entId}  {position}->{targetPos}  ({meI.transform.position}->{meI.targetPos})");
+
+        base.ActUppon((BaseEntity)meI);
     }
 }

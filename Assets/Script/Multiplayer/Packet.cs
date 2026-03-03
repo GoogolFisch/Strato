@@ -63,20 +63,31 @@ public class Packet
     }
     public bool keepIfOrderMism(){return false;}
 
+    public static void prnBinData(byte[] bytes,int minIdx,int maxIdx,string prefix = "$"){
+
+        StringBuilder hex = new StringBuilder((maxIdx - minIdx) * 3);
+        for(int idx = minIdx;idx < maxIdx;idx++)
+            hex.AppendFormat("{0:x2} ", bytes[idx]);
+        string outp = hex.ToString();
+        Debug.Log(prefix + outp);
+    }
+
     public static Packet ParsePacket(byte[] message,ref int index,int maxLen = -1)
     {
         if(maxLen < 0)maxLen = message.Length;
-        if(index + 8 > message.Length){
+        if(index + 8 >= message.Length){
             Debug.Log($"there a'int space  {index} {message.Length}");
             return null;
         }
         int length = BitConverter.ToInt32(message,index);
         int id = BitConverter.ToInt32(message,index + 4);
-        if(length + index > message.Length){
-            Debug.Log("there isn't space for the two of us {length} + {index} > {message.Length}");
+        if(length + index >= message.Length){
+            Debug.Log($"there isn't space for the two of us {length} + {index} > {message.Length}");
             return null;
         }
         index += 8;
+        int useIndex = index;
+        index += length;
         if(possible.Count < id)return new Packet(id);
         if(id < 0)return new Packet(id);
         //
@@ -89,9 +100,7 @@ public class Packet
         Packet pout = (Packet)((
             possible[id].GetConstructor(new Type[0])
                 ).Invoke(new System.Object[0]));
-        int putIndex = index;
-        pout.PopulatePacket(ref putIndex,message,length);
-        index += length;
+        pout.PopulatePacket(ref useIndex,message,length + useIndex);
         return pout;
     }
 

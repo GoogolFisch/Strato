@@ -8,8 +8,10 @@ public class DeLogger : MonoBehaviour
     public List<Text> logs;
     public const int COUNT = 32;
     public Text insText;
+    public bool alive;
     void Awake(){
         DeLogger.dl = this;
+        alive = true;
     }
 
     void FixedUpdate(){
@@ -17,6 +19,7 @@ public class DeLogger : MonoBehaviour
     }
 
     public void Log(string str){
+        if(!alive)return;
         if(logs.Count >= COUNT){
             Destroy(logs[0].gameObject);
             logs.RemoveAt(0);
@@ -25,5 +28,8 @@ public class DeLogger : MonoBehaviour
                         Quaternion.identity,transform);
         newT.text = str;
         logs.Add(newT);
+    }
+    void OnDestroy(){
+        alive = false;
     }
 }
