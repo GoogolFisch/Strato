@@ -75,13 +75,21 @@ public class MovingEntOrder : BaseEntityPacket
             return;
         }
         BaseEntity beI = EntityManager.em.enityList[entId];
-        if(!beI.GetType().IsSubclassOf(typeof(MovingEntity)))return;
-        MovingEntity meI = (MovingEntity)beI;
+        //Debug.Log($"Hello {beI}");
+        MovingEntity meI = beI as MovingEntity;
+        if(meI == null)return;
+        //MovingEntity meI = (MovingEntity)beI;
         ActUppon(meI);
     }
     public void ActUppon(MovingEntity meI){
-        meI.targetEnt = EntityManager.em.enityList[attackingEnt];
-        meI.followEnt = EntityManager.em.enityList[followEnt];
+        if(attackingEnt != 0)
+            meI.targetEnt = EntityManager.em.enityList[attackingEnt];
+        else
+            meI.targetEnt = null;
+        if(followEnt != 0)
+            meI.followEnt = EntityManager.em.enityList[followEnt];
+        else
+            meI.followEnt = null;
         meI.targetPos = targetPos;
         meI.moveVector = moveVector;
 

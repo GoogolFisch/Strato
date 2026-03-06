@@ -11,5 +11,7 @@ public enum PacketTypes
 
     SummonEntityPacket,
 
+    SetPlayerInfo,
+
     PackUp,
 }

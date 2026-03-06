@@ -29,6 +29,8 @@ public class Packet
         possible[(int)PacketTypes.BaseEntityPacket] = typeof(BaseEntityPacket);
         possible[(int)PacketTypes.MovingEntityPacket] = typeof(MovingEntOrder);
         possible[(int)PacketTypes.SummonEntityPacket] = typeof(SummonEntityPacket);
+
+        possible[(int)PacketTypes.SetPlayerInfo] = typeof(SetPlayerInfo);
         return possible;
     }
     //public static List<Func<int,int,byte[],int,Packet>> possible = SetupPackets();

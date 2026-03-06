@@ -32,3 +32,7 @@ Impossible requirements:
 
 ## Note
 this project combines oop and sockets.
+
+
+## Implementaion Ideas
+- easyer moving by dragging with right-click (prev state is null) from entity to point and move all neighbours

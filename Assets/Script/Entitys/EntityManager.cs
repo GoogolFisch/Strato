@@ -80,11 +80,20 @@ public class EntityManager : MonoBehaviour
         {
             //DestroyImmediate(SelectedObj.selObj);
             Destroy(SelectedObj.selObj.gameObject);
-            selectedEnt = null;
+            if(gm == null)
+                selectedEnt = null;
         }
         if(gm != null)
         {
-            selectedEnt = gm;
+            if(selectedEnt != null && selectedEnt.GetType().IsSubclassOf(typeof(MovingEntity))){
+                if(selectedEnt == ((MovingEntity)gm).followEnt){
+                    selectedEnt = gm;
+                }else{
+                    selectedEnt = ((MovingEntity)gm).followEnt;
+                }
+            }else{
+                selectedEnt = gm;
+            }
             Vector3 vpos = gm.transform.position + Vector3.up * 3;
             Instantiate(insertWithSelected,vpos,Quaternion.identity,gm.transform);
         }

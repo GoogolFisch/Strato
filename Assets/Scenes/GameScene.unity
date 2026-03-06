@@ -868,7 +868,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   playerCount: 5
   baseRadius: 48
-  homeBase: {fileID: 7224408860580563439, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
+  homeBase: {fileID: 2431538318365486836, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
   allEntitys:
   - {fileID: 8314566212481155323, guid: 12e0ac85e0f64eada89e01677ae335c3, type: 3}
   selectedEnt: {fileID: 0}
@@ -1192,6 +1192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   logs: []
   insText: {fileID: 133841357225115357, guid: 3e497dd5e534b9300bf0545af153eccb, type: 3}
+  alive: 0
 --- !u!4 &1904683967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5521387363721707481, guid: 12e0ac85e0f64eada89e01677ae335c3, type: 3}

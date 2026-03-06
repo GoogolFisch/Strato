@@ -4,6 +4,7 @@ using UnityEngine;
 public class TowerEntity : BaseEntity
 {
     public BaseEntity targetEnt;
+    public MovingEntity spawnEntity;
 
     public float radius = 1;
 
@@ -20,7 +21,7 @@ public class TowerEntity : BaseEntity
     }
     new internal void FixedUpdate()
     {
-        base.FixedUpdate();
+        /*
         if (targetEnt != null && Vector3.Distance(transform.position, targetEnt.transform.position) < radius)
         {
             if (targetEnt.Damage(1))
@@ -38,5 +39,11 @@ public class TowerEntity : BaseEntity
             targetEnt = lbe[i];
             break;
         }
+        //   */
+        base.FixedUpdate();
+        if(tick > 51)return;
+        tick = 0;
+        Instantiate(spawnEntity,transform.position,
+                Quaternion.identity,EntityManager.em.transform);
     }
 }

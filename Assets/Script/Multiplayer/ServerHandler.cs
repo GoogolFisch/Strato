@@ -57,6 +57,7 @@ public class ServerHandler : IDisposable
         foreach(DirConnection dc in clCons)
             dc.Handel();
         //serverSocket.Start(5);
+        // accept new connections
         if(serverSocket.Pending()){
             TcpClient tcpClient = serverSocket.AcceptTcpClient();
             DeLogger.dl.Log($"pend {tcpClient.Client.RemoteEndPoint}");
@@ -64,6 +65,7 @@ public class ServerHandler : IDisposable
             InitSockConn(dcNew);
             clCons.Add(dcNew);
         }
+        // resend packets
         foreach(DirConnection dc in clCons){
             if(dc.HasIncomming()){
                 succ = true;
@@ -74,9 +76,11 @@ public class ServerHandler : IDisposable
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
+                    Debug.Log($"resending {pck} from {dc} to {dc2}");
                 }
             }
         }
+        // remove not alive connections
         for(int i = 0;i < clCons.Count;i++){
             if(clCons[i].alive)continue;
             clCons[i].Dispose();
