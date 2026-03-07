@@ -157,6 +157,8 @@ public class DirConnection : IDisposable
                 sock.Send(enc);
             }catch(SocketException se){
                 alive = false;
+
+                if(se == null){}
             }
         }
         return;

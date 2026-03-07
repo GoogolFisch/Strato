@@ -10,6 +10,7 @@ public enum PacketTypes
     MovingEntityPacket,
 
     SummonEntityPacket,
+    AttackingPacket,
 
     SetPlayerInfo,
 

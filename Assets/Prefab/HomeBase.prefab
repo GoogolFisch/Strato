@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomeEntity
   id: 0
-  health: 0
-  baseHealth: 0
+  health: 200
+  baseHealth: 200
   playerOwner: 0
   tick: 0
   targetEnt: {fileID: 0}

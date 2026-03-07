@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   id: 0
-  health: 0
+  health: 20
   baseHealth: 20
   playerOwner: 0
   tick: 0
@@ -54,7 +54,10 @@ MonoBehaviour:
   followEnt: {fileID: 0}
   targetEnt: {fileID: 0}
   speed: 1
+  colRadius: 1
+  attackDamage: 4
   moveVector: {x: 0, y: 0, z: 0}
+  redirectVel: {x: 0, y: 0, z: 0}
 --- !u!1001 &773323741244162293
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class MovingEntity : BaseEntity
 
     public float speed = 1;
     public float colRadius = 1;
+    public float attackDamage;
     public Vector3 moveVector;
     public Vector3 redirectVel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -88,9 +89,34 @@ public class MovingEntity : BaseEntity
             }
         }
         redirectVel.Normalize();
+        if(playerOwner != GameManager.gm.currentTeam)return;
         transform.position = new Vector3(transform.position.x,0,transform.position.z);
         if(MemoryHandler.mh.shan != null)
             MemoryHandler.mh.shan.AddPacket(SendStatus());
+        AttackingPacket attingP = TryAttack(bes);
+        if(attingP != null)
+            MemoryHandler.mh.shan.AddPacket(attingP);
+    }
+    public AttackingPacket TryAttack(List<BaseEntity> bes){
+        float minDist = 99;
+        BaseEntity attacking = null;
+        foreach(BaseEntity be in bes)
+        {
+            if(be == this)continue;
+            if(be.playerOwner == playerOwner)continue;
+            Vector3 dif = be.transform.position - transform.position;
+            float dstSq = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
+            if(dstSq < minDist)
+            {
+                minDist = dstSq;
+                attacking = be;
+            }
+        }
+        if(attacking == null)return null;
+        Debug.Log($"attacking {attacking} at {minDist}");
+        AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
+            MemoryHandler.mh.shan.AddPacket(SendStatus());
+        return atingP;
     }
     public void FollowEnt(BaseEntity be)
     {

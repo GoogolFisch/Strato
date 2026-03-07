@@ -14,13 +14,13 @@ public class BaseEntity : MonoBehaviour
     {
         if(id == 0)
         {
-            id = (ulong)Random.Range(0,0x10000);
+            id = (uint)Random.Range(0,0x10000);
             id <<= 16;
-            id |= (ulong)Random.Range(0,0x10000);
+            id |= (uint)Random.Range(0,0x10000);
             id <<= 16;
-            id |= (ulong)Random.Range(0,0x10000);
+            id |= (uint)Random.Range(0,0x10000);
             id <<= 16;
-            id |= (ulong)Random.Range(0,0x10000);
+            id |= (uint)Random.Range(0,0x10000);
         }
     }
     internal void Start()
@@ -67,6 +67,17 @@ public class BaseEntity : MonoBehaviour
     {
         baseHealth -= i;
         return baseHealth < 0;
+    }
+
+    public void OnDamage(float i,BaseEntity attackee){
+        baseHealth -= i;
+        if(baseHealth < 0)
+            OnKill(attackee);
+    }
+
+    public void OnKill(BaseEntity attackee){
+        EntityManager.em.enityList.Remove(id);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame

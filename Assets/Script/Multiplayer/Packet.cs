@@ -29,6 +29,7 @@ public class Packet
         possible[(int)PacketTypes.BaseEntityPacket] = typeof(BaseEntityPacket);
         possible[(int)PacketTypes.MovingEntityPacket] = typeof(MovingEntOrder);
         possible[(int)PacketTypes.SummonEntityPacket] = typeof(SummonEntityPacket);
+        possible[(int)PacketTypes.AttackingPacket] = typeof(AttackingPacket);
 
         possible[(int)PacketTypes.SetPlayerInfo] = typeof(SetPlayerInfo);
         return possible;
@@ -103,6 +104,7 @@ public class Packet
         }
         //Packet pout = (Packet)Activator.CreateInstance(possible[id],id,message,length);
         //Packet pout = (Packet)possible[id](id,index,message,length);
+        if(possible[id] == null)return new Packet();
         Packet pout = (Packet)((
             possible[id].GetConstructor(new Type[0])
                 ).Invoke(new System.Object[0]));
