@@ -49,5 +49,17 @@ public class ChatPacket : Packet
 
     override public void ActUppon(){
         DeLogger.dl.Log($"[{playerName}]:{playerMessage}");
+        if(playerMessage == ""){
+
+        }
+    }
+
+    public void TrySetName(DirConnection dc){
+        if(playerMessage != "")return;
+        dc.name = playerName;
+        dc.gameTeam = dc.name.GetHashCode();
+        if(dc.gameTeam < 0)dc.gameTeam = ~dc.gameTeam;
+        SetPlayerInfo spi = new SetPlayerInfo(dc);
+        dc.AddOutgoingPacket(spi);
     }
 }

@@ -89,7 +89,8 @@ public class MovingEntity : BaseEntity
         }
         redirectVel.Normalize();
         transform.position = new Vector3(transform.position.x,0,transform.position.z);
-        MemoryHandler.mh.shan.AddPacket(SendStatus());
+        if(MemoryHandler.mh.shan != null)
+            MemoryHandler.mh.shan.AddPacket(SendStatus());
     }
     public void FollowEnt(BaseEntity be)
     {

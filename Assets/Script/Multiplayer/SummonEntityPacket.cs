@@ -9,7 +9,7 @@ public class SummonEntityPacket : BaseEntityPacket
     public Packet subPack;
     public SummonEntityPacket() : base()
     {
-        this.id = PacketTypes.BaseEntityPacket;
+        this.id = PacketTypes.SummonEntityPacket;
         ePlayerOwner = -1;
         entityType = -1;
         subPack = null;

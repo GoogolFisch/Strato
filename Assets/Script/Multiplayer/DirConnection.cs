@@ -12,6 +12,8 @@ public class DirConnection : IDisposable
     public Socket sock;
     public TcpClient tcpCl;
     public EndPoint point;
+    public int gameTeam = -1;
+    public string name = "";
     public List<Packet> outgoingPackets;
     public List<Packet> incommingPackets;
 
@@ -62,8 +64,8 @@ public class DirConnection : IDisposable
             addedPack = Packet.ParsePacket(message,ref index);
             if(addedPack == null)break;
             //if(delta > 0 || addedPack.keepIfOrderMism())
-                pack.Add(addedPack);
-            DeLogger.dl.Log($"{addedPack.GetType()} {addedPack}");
+            pack.Add(addedPack);
+            //DeLogger.dl.Log($"{addedPack.GetType()} {addedPack}");
         }while(addedPack != null);
         prevBytes = barr.GetRange(index,barr.Count - index).ToArray();
 
@@ -116,12 +118,13 @@ public class DirConnection : IDisposable
     }
     public void FlushOutgoingPacket()
     {
-        const int BufferSize = 8000;
+        //const int BufferSize = 8000;
         List<byte> outgoing = new List<byte>();
         while (true)
         {
             bool doBreak = true;
             int off = 0;
+            /*
             for(off = 0;off < 8 && off < outgoingPackets.Count;off++){
                 Packet pack = outgoingPackets[off];
                 byte[] buf = pack.PackPacket();
@@ -130,7 +133,18 @@ public class DirConnection : IDisposable
                 outgoing.AddRange(buf);
                 doBreak = false;
                 outgoingPackets.RemoveAt(off);
+                off--;
             }
+            //  */
+            for(off = 0;off < 8 && off < outgoingPackets.Count;off++){
+                Packet pack = outgoingPackets[off];
+                byte[] buf = pack.PackPacket();
+                outgoing.AddRange(buf);
+                doBreak = false;
+                outgoingPackets.RemoveAt(off);
+                off--;
+            }
+            
             if(doBreak)
                 break;
         }
@@ -138,7 +152,7 @@ public class DirConnection : IDisposable
         byte[] enc = bufOut;
         if(symkey != null)enc = Encrypt(bufOut,symkey);
         if(enc.Length > 0){
-            DeLogger.dl.Log($"{enc}:{enc.Length}");
+            //DeLogger.dl.Log($"{enc}:{enc.Length}");
             try{
                 sock.Send(enc);
             }catch(SocketException se){
@@ -174,6 +188,7 @@ public class DirConnection : IDisposable
                 buffer = Decrypt(buffer,symkey);
             List<Packet> packets = getPackets(buffer);
             incommingPackets.AddRange(packets);
+            break;
         }
         FlushOutgoingPacket();
     }

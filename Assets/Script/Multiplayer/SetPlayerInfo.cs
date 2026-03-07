@@ -13,10 +13,16 @@ public class SetPlayerInfo : Packet
         team = 0;
         other = 0;
     }
-    public SetPlayerInfo(PlayerController pc) : base()
+    public SetPlayerInfo(DirConnection dc) : base()
     {
         this.id = PacketTypes.SetPlayerInfo;
-        team = MemoryHandler.mh.shan.clCons.Count;
+        team = dc.gameTeam;
+        other = 0;
+    }
+    public SetPlayerInfo(ServerHandler shan) : base()
+    {
+        this.id = PacketTypes.SetPlayerInfo;
+        team = shan.clCons.Count;
         other = 0;
     }
     
@@ -47,5 +53,6 @@ public class SetPlayerInfo : Packet
 
     override public void ActUppon(){
         GameManager.gm.currentTeam = team;
+        DeLogger.dl.Log($"setting current team to {team}");
     }
 }

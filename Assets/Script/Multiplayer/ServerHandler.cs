@@ -76,7 +76,12 @@ public class ServerHandler : IDisposable
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
-                    Debug.Log($"resending {pck} from {dc} to {dc2}");
+                    if((pck as SummonEntityPacket) != null)
+                        Debug.Log($"resending {pck} from {dc} to {dc2}");
+                }
+                if(dc.gameTeam == -1 && pck.GetType() == typeof(ChatPacket)){
+                    ChatPacket chatP = pck as ChatPacket;
+                    chatP.TrySetName(dc);
                 }
             }
         }
@@ -90,7 +95,10 @@ public class ServerHandler : IDisposable
         return succ;
     }
 
+    // send the entitys to setup
     public void InitSockConn(DirConnection dc){
+        //SetPlayerInfo spi = new SetPlayerInfo(this);
+        //dc.AddOutgoingPacket(spi);
         foreach(var item in EntityManager.em.enityList)
         {
             // item.Key, item.Value

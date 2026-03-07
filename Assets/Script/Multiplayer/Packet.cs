@@ -81,6 +81,10 @@ public class Packet
             Debug.Log($"there a'int space  {index} {message.Length}");
             return null;
         }
+        if(index < 0){
+            Debug.Log($"why is index at {index}");
+            return null;
+        }
         int length = BitConverter.ToInt32(message,index);
         int id = BitConverter.ToInt32(message,index + 4);
         if(length + index >= message.Length){

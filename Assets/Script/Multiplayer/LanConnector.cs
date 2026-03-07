@@ -63,7 +63,8 @@ public class LanConnector : IDisposable
         _onListenTcs = new();
         //Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
 
-        _udpClient = new UdpClient(_port);
+        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, _port);
+        _udpClient = new UdpClient(ipEndPoint);
         _udpClient.ExclusiveAddressUse = false;
         _udpClient.BeginReceive(Receive, _udpClient);
         var resultTask = await Task.WhenAny(_onListenTcs.Task, CreateHostSessionTask());
@@ -79,7 +80,7 @@ public class LanConnector : IDisposable
     private void Receive(IAsyncResult asyncResult)
     {
         UdpClient udpClient = (UdpClient)(asyncResult.AsyncState);
-        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
+        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, _port);
         byte[] data = Array.Empty<byte>();
 
         try

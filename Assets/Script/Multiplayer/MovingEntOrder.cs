@@ -93,7 +93,7 @@ public class MovingEntOrder : BaseEntityPacket
         meI.targetPos = targetPos;
         meI.moveVector = moveVector;
 
-        Debug.Log($"{entId}  {position}->{targetPos}  ({meI.transform.position}->{meI.targetPos})");
+        //Debug.Log($"{entId}  {position}->{targetPos}  ({meI.transform.position}->{meI.targetPos})");
 
         base.ActUppon((BaseEntity)meI);
     }
