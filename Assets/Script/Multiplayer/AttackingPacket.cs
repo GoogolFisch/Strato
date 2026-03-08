@@ -10,21 +10,21 @@ public class AttackingPacket : Packet
     public float damage;
     public AttackingPacket() : base()
     {
-        this.id = PacketTypes.PackNone;
+        this.id = PacketTypes.AttackingPacket;
         targetEnt = 0;
         actingEnt = 0;
         damage = 0;
     }
     public AttackingPacket(BaseEntity beAgressor,BaseEntity beVictim) : base()
     {
-        this.id = PacketTypes.PackNone;
+        this.id = PacketTypes.AttackingPacket;
         targetEnt = beVictim.id;
         actingEnt = beAgressor.id;
         damage = 1;
     }
     public AttackingPacket(BaseEntity beAgressor,BaseEntity beVictim,float damage) : base()
     {
-        this.id = PacketTypes.PackNone;
+        this.id = PacketTypes.AttackingPacket;
         targetEnt = beVictim.id;
         actingEnt = beAgressor.id;
         this.damage = damage;
@@ -59,18 +59,25 @@ public class AttackingPacket : Packet
     }
 
     override public void ActUppon(){
+        BaseEntity acEnt;
+    BaseEntity trEnt;
         if(!EntityManager.em.enityList.ContainsKey(actingEnt)){
             Debug.Log("Argh! Attacker doesn't exist");
-            return;
+            acEnt = null;
+        }else{
+            acEnt = EntityManager.em.enityList[actingEnt];
         }
         if(!EntityManager.em.enityList.ContainsKey(targetEnt)){
             Debug.Log("Argh! Attacker is attacking nothing?");
             return;
         }
-        BaseEntity acEnt = EntityManager.em.enityList[actingEnt];
-        BaseEntity trEnt = EntityManager.em.enityList[targetEnt];
+        trEnt = EntityManager.em.enityList[targetEnt];
+        ActUppon(acEnt,trEnt);
     }
     public void ActUppon(BaseEntity acEnt,BaseEntity trEnt){
         trEnt.OnDamage(damage,acEnt);
+        if(damage > 9999){
+            trEnt.OnKill(acEnt);
+        }
     }
 }

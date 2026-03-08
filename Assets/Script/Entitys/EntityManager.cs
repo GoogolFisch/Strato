@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class EntityManager : MonoBehaviour
 {
-    public int playerCount = 2;
     public float baseRadius = 2;
     public BaseEntity homeBase;
     public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
@@ -28,6 +27,7 @@ public class EntityManager : MonoBehaviour
 
     public void SummonHomes(){
         float twoPi = Mathf.PI * 2;
+        int playerCount = MemoryHandler.mh.maxPlCnt;
         for(int i = 0;i < playerCount; i++)
         {
             Vector3 vpos = new Vector3(Mathf.Sin(twoPi * i / playerCount),
@@ -85,17 +85,20 @@ public class EntityManager : MonoBehaviour
         }
         if(gm != null)
         {
-            if(selectedEnt != null && selectedEnt.GetType().IsSubclassOf(typeof(MovingEntity))){
+            if((gm as MovingEntity) != null){
                 if(selectedEnt == ((MovingEntity)gm).followEnt){
                     selectedEnt = gm;
                 }else{
                     selectedEnt = ((MovingEntity)gm).followEnt;
                 }
+                if(selectedEnt == null){
+                    selectedEnt = gm;
+                }
             }else{
                 selectedEnt = gm;
             }
-            Vector3 vpos = gm.transform.position + Vector3.up * 3;
-            Instantiate(insertWithSelected,vpos,Quaternion.identity,gm.transform);
+            Vector3 vpos = selectedEnt.transform.position + Vector3.up * 3;
+            Instantiate(insertWithSelected,vpos,Quaternion.identity,selectedEnt.transform);
         }
     }
     public void DoSelectObject2(BaseEntity gm)

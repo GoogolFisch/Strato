@@ -23,9 +23,11 @@ public class MovingEntOrder : BaseEntityPacket
     {
         this.id = PacketTypes.MovingEntityPacket;
         followEnt = 0;
+        if(me.followEnt != null)
+            followEnt = me.followEnt.id;
         attackingEnt = 0;
         targetPos = me.targetPos;
-        moveVector = me.moveVector;
+        moveVector = me.moveVector + me.redirectVel;
     }
 
     override public List<byte> PacketData()

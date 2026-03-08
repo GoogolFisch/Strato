@@ -76,12 +76,18 @@ public class ServerHandler : IDisposable
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
-                    if((pck as SummonEntityPacket) != null)
-                        Debug.Log($"resending {pck} from {dc} to {dc2}");
+                    if((pck as AttackingPacket) != null){
+                        string log = $"resending {pck} from {dc} to {dc2}";
+                        Debug.Log(log);
+                        DeLogger.dl.Log(log);
+                    }
                 }
                 if(dc.gameTeam == -1 && pck.GetType() == typeof(ChatPacket)){
                     ChatPacket chatP = pck as ChatPacket;
                     chatP.TrySetName(dc);
+                    if(clCons.Count >= MemoryHandler.mh.maxPlCnt){
+                        EntityManager.em.SummonHomes();
+                    }
                 }
             }
         }

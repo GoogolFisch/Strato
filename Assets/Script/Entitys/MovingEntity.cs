@@ -113,9 +113,10 @@ public class MovingEntity : BaseEntity
             }
         }
         if(attacking == null)return null;
-        Debug.Log($"attacking {attacking} at {minDist}");
+        Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
         AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
-            MemoryHandler.mh.shan.AddPacket(SendStatus());
+        MemoryHandler.mh.shan.AddPacket(SendStatus());
+        atingP.ActUppon(this,attacking);
         return atingP;
     }
     public void FollowEnt(BaseEntity be)

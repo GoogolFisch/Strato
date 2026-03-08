@@ -871,6 +871,7 @@ MonoBehaviour:
   homeBase: {fileID: 2431538318365486836, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
   allEntitys:
   - {fileID: 8314566212481155323, guid: 12e0ac85e0f64eada89e01677ae335c3, type: 3}
+  - {fileID: 2431538318365486836, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
   selectedEnt: {fileID: 0}
   insertWithSelected: {fileID: 2054689341864937982, guid: bb11c44efd02db8e8941cd81051fe52d, type: 3}
 --- !u!1 &1304352202

@@ -22,6 +22,7 @@ public class BaseEntity : MonoBehaviour
             id <<= 16;
             id |= (uint)Random.Range(0,0x10000);
         }
+        health = baseHealth;
     }
     internal void Start()
     {
@@ -65,19 +66,28 @@ public class BaseEntity : MonoBehaviour
     }
     public bool Damage(float i)
     {
-        baseHealth -= i;
-        return baseHealth < 0;
+        health -= i;
+        return health < 0;
     }
 
     public void OnDamage(float i,BaseEntity attackee){
-        baseHealth -= i;
-        if(baseHealth < 0)
-            OnKill(attackee);
+        health -= i;
+        if(health < 0){
+            if(attackee != null){
+                if(MemoryHandler.mh.shan.clCons != null){
+                    AttackingPacket atp = new AttackingPacket(attackee,this,99999);
+                    atp.ActUppon();
+                    MemoryHandler.mh.shan.AddPacket(atp);
+                }
+            }
+            else
+                health = i;
+        }
     }
 
     public void OnKill(BaseEntity attackee){
-        EntityManager.em.enityList.Remove(id);
-        Destroy(gameObject);
+            EntityManager.em.enityList.Remove(id);
+            Destroy(gameObject);
     }
 
     // Update is called once per frame
