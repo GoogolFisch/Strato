@@ -27,9 +27,12 @@ public class EntityManager : MonoBehaviour
 
     public void SummonHomes(){
         float twoPi = Mathf.PI * 2;
-        int playerCount = MemoryHandler.mh.maxPlCnt;
+        int playerCount = MemoryHandler.mh.maxPlCnt + 1;
         for(int i = 0;i < playerCount; i++)
         {
+            int team;
+            if(i == 0)team = 0;
+            else team = MemoryHandler.mh.shan.clCons[i - 1].gameTeam;
             Vector3 vpos = new Vector3(Mathf.Sin(twoPi * i / playerCount),
                         0,Mathf.Cos(twoPi * i / playerCount));
             vpos *= baseRadius;

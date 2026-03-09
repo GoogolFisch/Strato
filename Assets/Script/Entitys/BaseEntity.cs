@@ -74,14 +74,14 @@ public class BaseEntity : MonoBehaviour
         health -= i;
         if(health < 0){
             if(attackee != null){
-                if(MemoryHandler.mh.shan.clCons != null){
+                if(MemoryHandler.mh.shan.clCons != null && i < 9999){
                     AttackingPacket atp = new AttackingPacket(attackee,this,99999);
                     atp.ActUppon();
                     MemoryHandler.mh.shan.AddPacket(atp);
                 }
             }
             else
-                health = i;
+                health += i;
         }
     }
 
@@ -99,7 +99,7 @@ public class BaseEntity : MonoBehaviour
     internal void FixedUpdate()
     {
         tick++;
-        if(tick < 128)
+        if(tick < 65536)
             return;
         tick = 0;
         MemoryHandler.mh.shan.AddPacket(SendStatus());
