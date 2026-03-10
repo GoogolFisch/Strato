@@ -866,7 +866,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624d71d53ad47482e9a527d294b9e181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerCount: 5
   baseRadius: 48
   homeBase: {fileID: 2431538318365486836, guid: 0f5bc12ad6e201759ba00b20685311ad, type: 3}
   allEntitys:
@@ -1316,6 +1315,8 @@ MonoBehaviour:
   memHand: {fileID: 0}
   uiMan: {fileID: 291409399}
   playerName: name
+  onesMaterial: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
+  bluePrintShader: {fileID: 4800000, guid: 4ae9c854b6b3118dfa15b1f9f4fcc7eb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

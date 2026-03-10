@@ -20,7 +20,7 @@ public class SummonEntityPacket : BaseEntityPacket
         entityType = -1;
         for(int idx = 0;idx < arr.Length;idx++){
             if(arr[idx].GetType() != me.GetType())continue;
-            Debug.Log(idx);
+            ///Debug.Log(idx);
             entityType = idx;
             break;
         }
@@ -38,7 +38,7 @@ public class SummonEntityPacket : BaseEntityPacket
         outp.AddRange(BitConverter.GetBytes(entityType));
         if(subPack != null)
             outp.AddRange(subPack.PackPacket());
-        Packet.prnBinData(outp.ToArray(),0,outp.Count,">>");
+        //Packet.prnBinData(outp.ToArray(),0,outp.Count,">>");
         return outp;
     }
 
@@ -50,11 +50,11 @@ public class SummonEntityPacket : BaseEntityPacket
         return pingp;
     }
     override public void PopulatePacket(ref int index,byte[] message,int maxIdx) {
-        Packet.prnBinData(message,index,maxIdx);
+        //Packet.prnBinData(message,index,maxIdx);
         base.PopulatePacket(ref index,message,maxIdx);
         ePlayerOwner = BitConverter.ToInt32(message,index);
         entityType = BitConverter.ToInt32(message,index + 4);
-        Debug.Log($"Ent: id-{entId} health-{eHealth} tick-{eTick}\nSummon: plOw-{ePlayerOwner} entType-{entityType}");
+        //Debug.Log($"Ent: id-{entId} health-{eHealth} tick-{eTick}\nSummon: plOw-{ePlayerOwner} entType-{entityType}");
         index += 8;
         if(maxIdx <= index)return;
         subPack = Packet.ParsePacket(message,ref index);

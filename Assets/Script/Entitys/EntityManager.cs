@@ -37,11 +37,11 @@ public class EntityManager : MonoBehaviour
                         0,Mathf.Cos(twoPi * i / playerCount));
             vpos *= baseRadius;
             BaseEntity be = Instantiate(homeBase,vpos,Quaternion.identity,transform);
-            be.playerOwner = i;
+            be.playerOwner = team;
         }
     }
     public void Summon(SummonEntityPacket sep){
-        Debug.Log($"type:{sep.entityType}");
+        //Debug.Log($"type:{sep.entityType}");
         BaseEntity be = Instantiate(allEntitys[sep.entityType],
                     sep.position,Quaternion.identity,transform);
         be.id = sep.entId;

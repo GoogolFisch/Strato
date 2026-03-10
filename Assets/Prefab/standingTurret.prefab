@@ -48,10 +48,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1526964690268444965, guid: 8fc472704716598df9c6351ac749420b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
     - target: {fileID: 919132149155446097, guid: 8fc472704716598df9c6351ac749420b, type: 3}
       propertyPath: m_Name
       value: standingTurret
       objectReference: {fileID: 0}
+    - target: {fileID: 3616844112969948802, guid: 8fc472704716598df9c6351ac749420b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
+    - target: {fileID: 7202271454713460447, guid: 8fc472704716598df9c6351ac749420b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
+    - target: {fileID: 7603786706384944740, guid: 8fc472704716598df9c6351ac749420b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
+    - target: {fileID: 8417361359673230750, guid: 8fc472704716598df9c6351ac749420b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 012d18b64cb0ad6ef8621f686603cd6b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +11,9 @@ public class GameManager : MonoBehaviour
     public MemoryHandler memHand;
     public UIManager uiMan;
     public string playerName = "name";
+    public Dictionary<int,Material> mats = new Dictionary<int,Material>();
+    public Material onesMaterial;
+    public Shader bluePrintShader;
     GroundState gs;
     void Awake(){
         gm = this;
@@ -20,6 +25,7 @@ public class GameManager : MonoBehaviour
         memHand = MemoryHandler.mh;
         playerName = memHand.plName;
         memHand.shan.AddPacket(new ChatPacket(""));
+        //mats.Add(0,onesMaterial);
     }
     
     public void RegisterGroundService(GroundState gs){
@@ -34,5 +40,18 @@ public class GameManager : MonoBehaviour
         gm = this;
         memHand = MemoryHandler.mh;
         //mh.Handel();
+    }
+    public Material GetMaterialFor(int playerTeam){
+        if(playerTeam == currentTeam)return onesMaterial;
+        if(mats.ContainsKey(playerTeam)){
+            return mats[playerTeam];
+        }
+        Debug.Log($"Create Material for :{playerTeam}");
+        Material m = new Material(bluePrintShader);
+        m.SetColor("Base Color", new Color(0,1,0));
+        m.SetColor("_BaseColor", new Color(0,1,0));
+        m.SetColor("Color", new Color(0,1,0));
+        mats.Add(playerTeam,m);
+        return m;
     }
 }

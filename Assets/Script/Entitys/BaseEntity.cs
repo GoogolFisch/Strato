@@ -46,6 +46,24 @@ public class BaseEntity : MonoBehaviour
             collideLayer = LayerMask.NameToLayer("Attackable");
             moveToLayer(collideLayer);
         }
+        // ???
+        SetColor(GameManager.gm.GetMaterialFor(playerOwner));
+    }
+    
+    void SetColor(Material mat){
+        // turn all of the children to be raycastable (2 layers)
+        foreach (Transform child in gameObject.transform)
+        {
+            //child.gameObject.layer = collideLayer;
+            foreach (Transform child2 in child)
+            {
+                MeshRenderer mr;
+                child2.TryGetComponent(out mr);
+                if(mr == null)continue;
+                mr.materials[0] = mat;
+                mr.material = mat;
+            }
+        }
     }
     void moveToLayer(int collideLayer)
     {
