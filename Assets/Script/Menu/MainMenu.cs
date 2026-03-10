@@ -57,7 +57,9 @@ public class MainMenu : MonoBehaviour
         if(!tstCnn)return;
         if(!int.TryParse(insertPlayerCount.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out MemoryHandler.mh.maxPlCnt)){
             //MemoryHandler.mh.maxPlCnt
+            MemoryHandler.mh.maxPlCnt = 1;
         }
+        MemoryHandler.mh.maxPlCnt--;
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
         MemoryHandler.mh.StartBoradCasting("Hello");
     }

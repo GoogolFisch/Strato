@@ -79,7 +79,8 @@ public class Packet
     {
         if(maxLen < 0)maxLen = message.Length;
         if(index + 8 >= message.Length){
-            Debug.Log($"there a'int space  {index} {message.Length}");
+            if(index != message.Length)
+                Debug.Log($"there a'int space  {index} {message.Length}");
             return null;
         }
         if(index < 0){

@@ -84,11 +84,11 @@ public class MovingEntOrder : BaseEntityPacket
         ActUppon(meI);
     }
     public void ActUppon(MovingEntity meI){
-        if(attackingEnt != 0)
+        if(attackingEnt != 0 && EntityManager.em.enityList.ContainsKey(attackingEnt))
             meI.targetEnt = EntityManager.em.enityList[attackingEnt];
         else
             meI.targetEnt = null;
-        if(followEnt != 0)
+        if(followEnt != 0 && EntityManager.em.enityList.ContainsKey(followEnt))
             meI.followEnt = EntityManager.em.enityList[followEnt];
         else
             meI.followEnt = null;

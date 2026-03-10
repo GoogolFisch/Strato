@@ -31,6 +31,10 @@ public class BaseEntity : MonoBehaviour
             return;
         }
         EntityManager.em.enityList.Add(id,this);
+        TestSetLayer();
+        SetColor(GameManager.gm.GetMaterialFor(playerOwner));
+    }
+    internal void TestSetLayer(){
         int collideLayer;
         if(playerOwner == GameManager.gm.currentTeam)
         {
@@ -46,22 +50,25 @@ public class BaseEntity : MonoBehaviour
             collideLayer = LayerMask.NameToLayer("Attackable");
             moveToLayer(collideLayer);
         }
-        // ???
-        SetColor(GameManager.gm.GetMaterialFor(playerOwner));
     }
     
-    void SetColor(Material mat){
+    internal void SetColor(Material mat){
         // turn all of the children to be raycastable (2 layers)
         foreach (Transform child in gameObject.transform)
         {
             //child.gameObject.layer = collideLayer;
             foreach (Transform child2 in child)
             {
-                MeshRenderer mr;
-                child2.TryGetComponent(out mr);
-                if(mr == null)continue;
-                mr.materials[0] = mat;
-                mr.material = mat;
+                child2.TryGetComponent(out MeshRenderer mr);
+                if(mr != null){
+                    mr.materials[0] = mat;
+                    mr.material = mat;
+                }
+                child2.TryGetComponent(out SkinnedMeshRenderer smr);
+                if(smr != null){
+                    smr.materials[0] = mat;
+                    smr.material = mat;
+                }
             }
         }
     }

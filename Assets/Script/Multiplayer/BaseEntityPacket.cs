@@ -71,7 +71,8 @@ public class BaseEntityPacket : Packet
     }
 
     public void ActUppon(BaseEntity beI){
-        beI.health = eHealth;
+        if(MemoryHandler.mh.shan.clCons == null)
+            beI.health = eHealth;
         beI.transform.position = position;
         beI.tick = eTick;
     }

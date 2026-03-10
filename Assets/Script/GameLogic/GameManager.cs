@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Collections.Generic;
@@ -48,9 +47,10 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log($"Create Material for :{playerTeam}");
         Material m = new Material(bluePrintShader);
-        m.SetColor("Base Color", new Color(0,1,0));
-        m.SetColor("_BaseColor", new Color(0,1,0));
-        m.SetColor("Color", new Color(0,1,0));
+        Color col = new Color(Random.Range(0f,1f),0.5f,Random.Range(0f,0.5f));
+        m.SetColor("Base Color", col);
+        m.SetColor("_BaseColor", col);
+        m.SetColor("Color", col);
         mats.Add(playerTeam,m);
         return m;
     }

@@ -125,8 +125,10 @@ public class MovingEntity : BaseEntity
         if(be.GetType() == typeof(MovingEntity))
         {
             MovingEntity ment = (MovingEntity)be;
-            if(ment.followEnt != null)
+            if(ment.followEnt != null){
                 followEnt = ment.followEnt;
+                targetPos = ment.transform.position;
+            }
         }
     }
     public void FollowPos(Vector3 pos)
