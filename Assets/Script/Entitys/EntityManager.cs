@@ -136,8 +136,8 @@ public class EntityManager : MonoBehaviour
     {
         if(selectedEnt == null){
             Debug.Log("Make Obj?");
-            BaseEntity be = Instantiate(allEntitys[0],hit,Quaternion.identity,transform);
-            be.playerOwner = GameManager.gm.currentTeam;
+            //BaseEntity be = Instantiate(allEntitys[0],hit,Quaternion.identity,transform);
+            //be.playerOwner = GameManager.gm.currentTeam;
             return;
         }
         if(selectedEnt.GetType() == typeof(MovingEntity))

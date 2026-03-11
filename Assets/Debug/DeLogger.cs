@@ -9,9 +9,13 @@ public class DeLogger : MonoBehaviour
     public const int COUNT = 32;
     public Text insText;
     public bool alive;
+    public bool isActive = false;
     void Awake(){
         DeLogger.dl = this;
         alive = true;
+        gameObject.SetActive(false);
+    }
+    void Start(){
     }
 
     void FixedUpdate(){

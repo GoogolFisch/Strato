@@ -28,8 +28,8 @@ public class HomeEntity : TowerEntity
                 Quaternion.identity,EntityManager.em.transform);
         me.followEnt = lastCreate;
         me.playerOwner = playerOwner;
-        if(lastCreate != null)
-            me.followEnt = lastCreate;
+        //if(lastCreate != null)
+        //    me.followEnt = lastCreate;
         lastCreate = me;
         if(playerOwner == GameManager.gm.currentTeam)return;
         SummonEntityPacket mep = new SummonEntityPacket(me);

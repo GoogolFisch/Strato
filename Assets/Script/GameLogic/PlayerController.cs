@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     float timeOffset = 0;
     bool oldMouseDown = false;
     bool oldMouseDown2 = false;
+    bool oldEscDown = false;
     //
     [Header("Input Actions")]
     public InputActionReference moveAction; // expects Vector2
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public InputActionReference mouseDown2Act; // ???
     public InputActionReference mouseMoveAct; // ???
     public InputActionReference mouseScrollAct; // ???
+    public InputActionReference escapeAct;
     //
     //UnityEvent m_MyEvent;
     void Start()
@@ -82,6 +84,12 @@ public class PlayerController : MonoBehaviour
         oldMouseDown = (mouseDown > 0.5);
         //
         oldMouseDown2 = (mouseDown2 > 0.5);
+
+        bool escDown = escapeAct.action.ReadValue<float>() > 0.5;
+        if(escDown && !oldEscDown){
+            GameMenu.gm.gameObject.SetActive(true);
+        }
+        oldEscDown = escDown;
     }
     void TrySelectEntity()
     {

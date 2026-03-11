@@ -22,8 +22,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         memHand = MemoryHandler.mh;
-        playerName = memHand.plName;
-        memHand.shan.AddPacket(new ChatPacket(""));
+        if(memHand == null){
+            playerName = "Debugger";
+        }else{
+            playerName = memHand.plName;
+            memHand.shan.AddPacket(new ChatPacket(""));
+        }
         //mats.Add(0,onesMaterial);
     }
     
