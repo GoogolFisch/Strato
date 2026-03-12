@@ -8,6 +8,7 @@ public class HomeEntity : BaseEntity
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
     {
+        transform.LookAt(Vector3.zero);
         base.Start();
         if(playerOwner == GameManager.gm.currentTeam)return;
         SummonEntityPacket mep = new SummonEntityPacket(this);

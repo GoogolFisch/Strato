@@ -28,7 +28,7 @@ public class FinishMenu : MonoBehaviour
     public void SetWin(string message){
         textBox.text = message;
         gameObject.SetActive(true);
-        FinishMenu.fm.gameObject.SetActive(false);
+        GameMenu.gm.gameObject.SetActive(false);
     }
     public void ButtonExit(){
         MemoryHandler.mh.GameConnectionFailed();

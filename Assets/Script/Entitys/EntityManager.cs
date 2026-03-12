@@ -68,10 +68,14 @@ public class EntityManager : MonoBehaviour
             if(he.playerOwner == testLoser)return;
         }
         // kill all of them!
+        List<BaseEntity> toRemove = new();
         foreach(ulong i in enityList.Keys)
         {
             BaseEntity be = enityList[i];
             if(be.playerOwner != testLoser)continue;
+            toRemove.Add(be);
+        }
+        foreach(BaseEntity be in toRemove){
             AttackingPacket attP = new AttackingPacket(be,be,AttackingPacket.KILL_AMMOUNT);
             attP.ActUppon();
             MemoryHandler.mh.shan.AddPacket(attP);
