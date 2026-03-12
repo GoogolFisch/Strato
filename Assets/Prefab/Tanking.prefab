@@ -54,7 +54,7 @@ MonoBehaviour:
   followEnt: {fileID: 0}
   targetEnt: {fileID: 0}
   speed: 1
-  colRadius: 1
+  colRadius: 1.2
   attackDamage: 4
   moveVector: {x: 0, y: 0, z: 0}
   redirectVel: {x: 0, y: 0, z: 0}

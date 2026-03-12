@@ -20,7 +20,7 @@ public class GameMenu : MonoBehaviour
     }
 
     public void ButtonExit(){
-        
+        MemoryHandler.mh.GameConnectionFailed();
     }
     public void ButtonContinue(){
         gameObject.SetActive(false);

@@ -8,6 +8,7 @@ public class AttackingPacket : Packet
     public ulong targetEnt;
     public ulong actingEnt;
     public float damage;
+    public const float KILL_AMMOUNT = 99999;
     public AttackingPacket() : base()
     {
         this.id = PacketTypes.AttackingPacket;
@@ -76,7 +77,7 @@ public class AttackingPacket : Packet
     }
     public void ActUppon(BaseEntity acEnt,BaseEntity trEnt){
         trEnt.OnDamage(damage,acEnt);
-        if(damage > 9999){
+        if(damage >= KILL_AMMOUNT){
             trEnt.OnKill(acEnt);
         }
     }

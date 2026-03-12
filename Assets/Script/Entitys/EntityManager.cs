@@ -8,6 +8,7 @@ public class EntityManager : MonoBehaviour
 {
     public float baseRadius = 2;
     public BaseEntity homeBase;
+    public BaseEntity turretEntity;
     public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
     public static EntityManager em;
 
@@ -38,6 +39,8 @@ public class EntityManager : MonoBehaviour
             vpos *= baseRadius;
             BaseEntity be = Instantiate(homeBase,vpos,Quaternion.identity,transform);
             be.playerOwner = team;
+            be = Instantiate(turretEntity,vpos * 0.9f,Quaternion.identity,transform);
+            be.playerOwner = team;
         }
     }
     public void Summon(SummonEntityPacket sep){
@@ -53,6 +56,41 @@ public class EntityManager : MonoBehaviour
         if(sep.subPack.GetType().IsSubclassOf(typeof(BaseEntity))){
             HandelPacket(sep);
         }
+    }
+    public void HaveLost(int testLoser){
+        if(testLoser != GameManager.gm.currentTeam)return;
+        // heavy function
+        foreach(ulong i in enityList.Keys)
+        {
+            BaseEntity be = enityList[i];
+            HomeEntity he = be as HomeEntity;
+            if(he == null)continue;
+            if(he.playerOwner == testLoser)return;
+        }
+        // kill all of them!
+        foreach(ulong i in enityList.Keys)
+        {
+            BaseEntity be = enityList[i];
+            if(be.playerOwner != testLoser)continue;
+            AttackingPacket attP = new AttackingPacket(be,be,AttackingPacket.KILL_AMMOUNT);
+            attP.ActUppon();
+            MemoryHandler.mh.shan.AddPacket(attP);
+        }
+        //
+        FinishMenu.fm.SetWin("You lose!");
+    }
+    public void HaveWon(int testLoser){
+        if(testLoser != GameManager.gm.currentTeam)return;
+        // heavy function
+        foreach(ulong i in enityList.Keys)
+        {
+            BaseEntity be = enityList[i];
+            HomeEntity he = be as HomeEntity;
+            if(he == null)continue;
+            if(he.playerOwner != testLoser)return;
+        }
+        FinishMenu.fm.SetWin("You won!");
+        FinishMenu.fm.AllowExit();
     }
     public void HandelPacket(BaseEntityPacket bep){
         Debug.Log("{2026-02-28T14:29:00}");

@@ -80,6 +80,7 @@ public class MovingEntity : BaseEntity
         foreach(BaseEntity be in bes)
         {
             if(be == this)continue;
+            if((be as MovingEntity) == null)continue;
             away = transform.position - be.transform.position;
             mag = away.magnitude;
             colMag = mag / colRadius;
@@ -113,7 +114,7 @@ public class MovingEntity : BaseEntity
             }
         }
         if(attacking == null)return null;
-        Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
+        //Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
         AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
         MemoryHandler.mh.shan.AddPacket(SendStatus());
         atingP.ActUppon(this,attacking);

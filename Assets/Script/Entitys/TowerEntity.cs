@@ -6,11 +6,16 @@ public class TowerEntity : BaseEntity
     public BaseEntity targetEnt;
 
     public float radius = 1;
+    public float attackDamage = 5;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
     {
+        transform.LookAt(Vector3.zero);
         base.Start();
+        if(playerOwner == GameManager.gm.currentTeam)return;
+        SummonEntityPacket mep = new SummonEntityPacket(this);
+        MemoryHandler.mh.shan.AddPacket(mep);
     }
 
     // Update is called once per frame
@@ -20,25 +25,32 @@ public class TowerEntity : BaseEntity
     }
     new internal void FixedUpdate()
     {
-        /*
-        if (targetEnt != null && Vector3.Distance(transform.position, targetEnt.transform.position) < radius)
-        {
-            if (targetEnt.Damage(1))
-            {
-                targetEnt = null;
-            }
-        }
-        if(tick < 4)
+        base.FixedUpdate();
+        if(tick < 5)
             return;
         tick = 0;
-        List<BaseEntity> lbe = EntityManager.em.getCircleEntity(transform.position,radius);
-        for(int i = 0;i < lbe.Count; i++)
+        List<BaseEntity> bes = EntityManager.em.getCircleEntity(
+                                transform.position,radius);
+        float minDist = 99;
+        BaseEntity attacking = null;
+        foreach(BaseEntity be in bes)
         {
-            if(lbe[i].playerOwner == playerOwner)continue;
-            targetEnt = lbe[i];
-            break;
+            if(be == this)continue;
+            if(be.playerOwner == playerOwner)continue;
+            Vector3 dif = be.transform.position - transform.position;
+            float dstSq = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
+            if(dstSq < minDist)
+            {
+                minDist = dstSq;
+                attacking = be;
+            }
         }
-        //   */
-        base.FixedUpdate();
+        if(attacking == null)return;
+        Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
+        AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
+        MemoryHandler.mh.shan.AddPacket(SendStatus());
+        atingP.ActUppon(this,attacking);
+        if(atingP != null)
+            MemoryHandler.mh.shan.AddPacket(atingP);
     }
 }

@@ -43,7 +43,8 @@ public class BaseEntity : MonoBehaviour
 
 
             SummonEntityPacket mep = new SummonEntityPacket(this);
-            MemoryHandler.mh.shan.AddPacket(mep);
+            if(MemoryHandler.mh != null)
+                MemoryHandler.mh.shan.AddPacket(mep);
         }
         else if(playerOwner > 0)
         {
@@ -110,9 +111,9 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    public void OnKill(BaseEntity attackee){
-            EntityManager.em.enityList.Remove(id);
-            Destroy(gameObject);
+    virtual public void OnKill(BaseEntity attackee){
+        EntityManager.em.enityList.Remove(id);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
