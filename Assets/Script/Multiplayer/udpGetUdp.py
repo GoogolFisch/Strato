@@ -5,8 +5,8 @@ import sys
 
 usock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 usock.setsockopt(socket.SOL_SOCKET,socket.SO_BROADCAST,1)
-usock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-PORT = 25359
+#usock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+PORT = 25350
 DTIME = 1
 
 def sending(data:bytes):
@@ -27,6 +27,6 @@ try:
     byting = b"\1\0\0\0"
     byting += bytes([len(bv) & 0xff,(len(bv) >> 8) & 0xff,(len(bv) >> 16) & 0xff,0])
     byting += bv
-    sending(byting + b"\2\0\0\0\5\0\0\0");
+    sending(byting + b"\2\0\0\0\5\0\0\0")
 except KeyboardInterrupt:
     pass

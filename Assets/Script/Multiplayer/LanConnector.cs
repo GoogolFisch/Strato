@@ -10,7 +10,7 @@ using UnityEngine;
 public class LanConnector : IDisposable
 {
     public const int PORT = 25359;
-    public const int PORT_DOWN = 25350;
+    public const int PORT_UDP = 25350;
     private readonly int _port;
     public int portService;
     // volitile?
@@ -20,8 +20,8 @@ public class LanConnector : IDisposable
 
     public LanConnector(int port = PORT)
     {
-        _port = port;
-        portService = PORT_DOWN;
+        _port = PORT_UDP;
+        portService = port;
     }
     public void Dispose()
     {
@@ -61,11 +61,10 @@ public class LanConnector : IDisposable
     public async Task<(IPEndPoint, byte[])> ListenForConnection()
     {
         _onListenTcs = new();
-        //Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
+        Debug.Log($"{nameof(LanConnector)}: Listening for local sessions on port {_port}.");
 
-        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, _port);
-        _udpClient = new UdpClient(ipEndPoint);
-        _udpClient.ExclusiveAddressUse = false;
+        IPEndPoint bindEP = new IPEndPoint(IPAddress.Any, _port);
+        _udpClient = new UdpClient(bindEP);
         _udpClient.BeginReceive(Receive, _udpClient);
         var resultTask = await Task.WhenAny(_onListenTcs.Task, CreateHostSessionTask());
         return resultTask.Result;
@@ -80,12 +79,12 @@ public class LanConnector : IDisposable
     private void Receive(IAsyncResult asyncResult)
     {
         UdpClient udpClient = (UdpClient)(asyncResult.AsyncState);
-        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, _port);
+        IPEndPoint listEP = new IPEndPoint(IPAddress.Any, 0);
         byte[] data = Array.Empty<byte>();
 
         try
         {
-            data = udpClient.EndReceive(asyncResult, ref ipEndPoint);
+            data = udpClient.EndReceive(asyncResult, ref listEP);
         }
         catch (ObjectDisposedException)
         {
@@ -97,7 +96,7 @@ public class LanConnector : IDisposable
             Debug.LogException(e);
         }
 
-        _onListenTcs.TrySetResult((ipEndPoint, data));
+        _onListenTcs.TrySetResult((listEP, data));
         StopListening();
     }
 
@@ -109,14 +108,14 @@ public class LanConnector : IDisposable
 
     public async void StartBroadcasting(byte[] sessionInformation, float broadcastInterval = 0.5f)
     {
-        Debug.Log($"{nameof(LanConnector)}: Broadcasting session on port {_port}.");
+        Debug.Log($"{nameof(LanConnector)}: Broadcasting session on port {_port} from {portService}.");
 
         _isBroadcasting = true;
 
         try
         {
-            //var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
-            var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
+            var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
+            //var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
             using (var senderSocket = new UdpClient(portService))
             {
                 senderSocket.EnableBroadcast = true;

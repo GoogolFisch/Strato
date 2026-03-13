@@ -118,8 +118,9 @@ public class MemoryHandler : MonoBehaviour
         TcpListener tcl = new TcpListener(ipe);
         try{
             tcl.Start();
-            if(tcl.LocalEndpoint.GetType().IsSubclassOf(typeof(IPEndPoint))){
-                udpLan.portService = ((IPEndPoint)tcl.LocalEndpoint).Port;
+            IPEndPoint ipending = tcl.LocalEndpoint as IPEndPoint;
+            if(ipending != null){
+                udpLan.portService = ipending.Port;
             }
         }catch(SocketException e){
             Debug.Log(e.ErrorCode);
