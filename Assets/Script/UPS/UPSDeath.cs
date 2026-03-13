@@ -5,7 +5,8 @@ public class UPSDeath : MonoBehaviour
     public static UPSDeath upsdeath;
     ParticleSystem part;
     void Awake(){
-        upsdeath = this;
+        if(upsdeath == null)
+            upsdeath = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

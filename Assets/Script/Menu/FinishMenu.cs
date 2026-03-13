@@ -29,12 +29,15 @@ public class FinishMenu : MonoBehaviour
         textBox.text = message;
         gameObject.SetActive(true);
         GameMenu.gm.gameObject.SetActive(false);
+        PlayerController.pc.isActive = false;
     }
     public void ButtonExit(){
         MemoryHandler.mh.GameConnectionFailed();
+        PlayerController.pc.isActive = true;
     }
     public void ButtonOK(){
         gameObject.SetActive(false);
+        PlayerController.pc.isActive = true;
     }
     public void AllowExit(){
         leaveButton.gameObject.SetActive(true);

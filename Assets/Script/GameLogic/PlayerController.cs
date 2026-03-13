@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController pc;
     [Range(0.1f,10f)]
     public float playerSpeed = 0.5f;
     private Vector3 playerVelocity;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     bool oldMouseDown = false;
     bool oldMouseDown2 = false;
     bool oldEscDown = false;
+    public bool isActive = true;
     //
     [Header("Input Actions")]
     public InputActionReference moveAction; // expects Vector2
@@ -27,6 +29,9 @@ public class PlayerController : MonoBehaviour
     public InputActionReference mouseScrollAct; // ???
     public InputActionReference escapeAct;
     //
+    void Awake(){
+        pc = this;
+    }
     //UnityEvent m_MyEvent;
     void Start()
     {
@@ -36,6 +41,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // escapeing
+        bool escDown = escapeAct.action.ReadValue<float>() > 0.5;
+        if(escDown && !oldEscDown){
+            GameMenu.gm.gameObject.SetActive(true);
+            isActive = false;
+        }
+        pc = this;
+        oldEscDown = escDown;
+        if(!isActive)return;
+        //
         Vector2 input = moveAction.action.ReadValue<Vector2>();
         Vector3 move = new Vector3(input.x, 0, input.y);
         move = Vector3.ClampMagnitude(move, 1f);
@@ -85,11 +100,6 @@ public class PlayerController : MonoBehaviour
         //
         oldMouseDown2 = (mouseDown2 > 0.5);
 
-        bool escDown = escapeAct.action.ReadValue<float>() > 0.5;
-        if(escDown && !oldEscDown){
-            GameMenu.gm.gameObject.SetActive(true);
-        }
-        oldEscDown = escDown;
     }
     void TrySelectEntity()
     {

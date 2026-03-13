@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
             insertPort.text = $"{LanConnector.PORT}";
         }else{
             insertName.text = MemoryHandler.mh.plName;
-            insertPlayerCount.text = $"{MemoryHandler.mh.maxPlCnt}";
+            insertPlayerCount.text = $"{MemoryHandler.mh.maxPlCnt + 1}";
             insertPort.text = $"{LanConnector.PORT}";
 
         }

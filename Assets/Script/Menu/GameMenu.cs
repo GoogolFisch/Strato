@@ -21,9 +21,11 @@ public class GameMenu : MonoBehaviour
 
     public void ButtonExit(){
         MemoryHandler.mh.GameConnectionFailed();
+        PlayerController.pc.isActive = true;
     }
     public void ButtonContinue(){
         gameObject.SetActive(false);
+        PlayerController.pc.isActive = true;
     }
     public void ButtonToggleLogging(){
         DeLogger.dl.gameObject.SetActive(
