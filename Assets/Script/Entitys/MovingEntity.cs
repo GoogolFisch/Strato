@@ -141,4 +141,8 @@ public class MovingEntity : BaseEntity
         MovingEntOrder mep = new MovingEntOrder(this);
         return mep;
     }
+    override public void OnKill(BaseEntity be){
+        UPSDeath.upsdeath.PlayAnimation(transform.position,transform.parent);
+        base.OnKill(be);
+    }
 }

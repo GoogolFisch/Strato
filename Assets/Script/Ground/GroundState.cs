@@ -21,10 +21,4 @@ public class GroundState : MonoBehaviour
             nss = new Noises();
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

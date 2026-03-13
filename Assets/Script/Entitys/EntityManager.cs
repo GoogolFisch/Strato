@@ -185,6 +185,7 @@ public class EntityManager : MonoBehaviour
             //be.playerOwner = GameManager.gm.currentTeam;
             return;
         }
+        if(hit.magnitude > baseRadius * 1.5f)return;
         if(selectedEnt.GetType() == typeof(MovingEntity))
         {
             MovingEntity ment = (MovingEntity)selectedEnt;
