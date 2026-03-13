@@ -76,11 +76,11 @@ public class ServerHandler : IDisposable
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
-                    if((pck as AttackingPacket) != null){
+                    /*if((pck as AttackingPacket) != null){
                         string log = $"resending {pck} from {dc} to {dc2}";
-                        Debug.Log(log);
-                        DeLogger.dl.Log(log);
-                    }
+                        //Debug.Log(log);
+                        //DeLogger.dl.Log(log);
+                    } // */
                 }
                 if(dc.gameTeam == -1 && pck.GetType() == typeof(ChatPacket)){
                     ChatPacket chatP = pck as ChatPacket;

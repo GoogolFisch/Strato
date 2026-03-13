@@ -29,6 +29,7 @@ public class TowerEntity : BaseEntity
         if(tick < 5)
             return;
         tick = 0;
+        if(playerOwner != GameManager.gm.currentTeam)return;
         List<BaseEntity> bes = EntityManager.em.getCircleEntity(
                                 transform.position,radius);
         float minDist = 99;
@@ -46,7 +47,7 @@ public class TowerEntity : BaseEntity
             }
         }
         if(attacking == null)return;
-        Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
+        //Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
         AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
         MemoryHandler.mh.shan.AddPacket(SendStatus());
         atingP.ActUppon(this,attacking);

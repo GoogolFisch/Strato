@@ -11,6 +11,7 @@ public class EntityManager : MonoBehaviour
     public BaseEntity turretEntity;
     public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
     public static EntityManager em;
+    public bool HasStarted = false;
 
 
     [Header("Entity List")]
@@ -27,6 +28,8 @@ public class EntityManager : MonoBehaviour
     }
 
     public void SummonHomes(){
+        if(HasStarted)return;
+        HasStarted = true;
         float twoPi = Mathf.PI * 2;
         int playerCount = MemoryHandler.mh.maxPlCnt + 1;
         for(int i = 0;i < playerCount; i++)

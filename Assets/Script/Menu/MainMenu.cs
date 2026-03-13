@@ -27,8 +27,15 @@ public class MainMenu : MonoBehaviour
         };
         string nameNow = baseName[Random.Range(0,baseName.Length)];
         nameNow += $"{Random.Range(0,100)}";
-        insertName.text = nameNow;
-        insertPort.text = $"{LanConnector.PORT}";
+        if(MemoryHandler.mh == null || MemoryHandler.mh.plName == ""){
+            insertName.text = nameNow;
+            insertPort.text = $"{LanConnector.PORT}";
+        }else{
+            insertName.text = MemoryHandler.mh.plName;
+            insertPlayerCount.text = $"{MemoryHandler.mh.maxPlCnt}";
+            insertPort.text = $"{LanConnector.PORT}";
+
+        }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -61,7 +68,7 @@ public class MainMenu : MonoBehaviour
         }
         MemoryHandler.mh.maxPlCnt--;
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
-        MemoryHandler.mh.StartBoradCasting("Hello");
+        MemoryHandler.mh.StartBoradCasting(insertName.text);
     }
     public void JoinGame(){
         int port;

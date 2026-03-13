@@ -37,8 +37,8 @@ public class LanConnector : IDisposable
         barr.AddRange(Packet.ConvertFromString(str));
         List<DirConnection> ldc = MemoryHandler.mh.shan.clCons;
         if(ldc != null){
-            barr.AddRange(BitConverter.GetBytes(MemoryHandler.mh.shan.clCons.Count));
-            barr.AddRange(BitConverter.GetBytes(MemoryHandler.mh.maxPlCnt));
+            barr.AddRange(BitConverter.GetBytes(1 + MemoryHandler.mh.shan.clCons.Count));
+            barr.AddRange(BitConverter.GetBytes(1 + MemoryHandler.mh.maxPlCnt));
         }else{
             barr.AddRange(BitConverter.GetBytes(0));
             barr.AddRange(BitConverter.GetBytes(0));
@@ -100,7 +100,7 @@ public class LanConnector : IDisposable
         StopListening();
     }
 
-    private void StopListening()
+    internal void StopListening()
     {
         _udpClient?.Dispose();
         _udpClient = null;
@@ -114,8 +114,8 @@ public class LanConnector : IDisposable
 
         try
         {
-            var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
-            //var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
+            //var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
+            var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
             using (var senderSocket = new UdpClient(portService))
             {
                 senderSocket.EnableBroadcast = true;

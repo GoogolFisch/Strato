@@ -20,7 +20,7 @@ public class MemoryHandler : MonoBehaviour
     public const string scGame = "GameScene";
     private string lastGScene = "";
 
-    public string plName = "name";
+    public string plName = "";
     public int maxPlCnt = 4;
 
     Task<(IPEndPoint,byte[])> udpListenerTask;
@@ -140,6 +140,7 @@ public class MemoryHandler : MonoBehaviour
         }
         //Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(sc);
+        udpLan.StopListening();
         lastGScene = sc;
         DontDestroyOnLoad(this.gameObject);
         //var newScene = SceneManager.CreateScene("GameScene",LoadSceneMode.Single);
