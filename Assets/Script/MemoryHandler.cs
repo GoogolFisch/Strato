@@ -22,6 +22,8 @@ public class MemoryHandler : MonoBehaviour
 
     public string plName = "";
     public int maxPlCnt = 4;
+    public int oreCount = 4;
+    public float baseRadius = 48;
 
     Task<(IPEndPoint,byte[])> udpListenerTask;
     Task broadcastSender;

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public string playerName = "name";
     public Dictionary<int,Material> mats = new Dictionary<int,Material>();
     public Material onesMaterial;
+    public Material oreMaterial;
     public Shader bluePrintShader;
     GroundState gs;
     void Awake(){

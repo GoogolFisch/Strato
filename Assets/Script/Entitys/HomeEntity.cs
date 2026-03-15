@@ -37,11 +37,16 @@ public class HomeEntity : BaseEntity
         MemoryHandler.mh.shan.AddPacket(mep);
     }
     override public void OnKill(BaseEntity be){
-        health = baseHealth / 2;
-        lastCreate = null;
+        if(GameManager.gm.currentTeam == be.playerOwner){
+            HomeEntity nHe = Instantiate(this,transform.position,
+                        transform.rotation,transform.parent);
+            nHe.baseHealth = baseHealth / 2;
+            nHe.playerOwner = be.playerOwner;
+            nHe.tickDelta = (int)(nHe.tickDelta * 1.5f);
+        }
         int oldOwner = playerOwner;
-        playerOwner = be.playerOwner;
-        SetColor(GameManager.gm.GetMaterialFor(playerOwner));
+        //SetColor(GameManager.gm.GetMaterialFor(playerOwner));
+        base.OnKill(be);
         TestSetLayer();
         Debug.Log("HomeEntity change player");
         EntityManager.em.HaveLost(oldOwner);

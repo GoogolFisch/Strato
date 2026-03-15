@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     public InputField insertIp;
     public InputField insertPort;
     public InputField insertPlayerCount;
+    public InputField insertBaseRadius;
+    public InputField insertOreCount;
     public Text ipErrorText;
     void Awake(){
         mm = this;
@@ -33,6 +35,7 @@ public class MainMenu : MonoBehaviour
         }else{
             insertName.text = MemoryHandler.mh.plName;
             insertPlayerCount.text = $"{MemoryHandler.mh.maxPlCnt + 1}";
+            insertOreCount.text = $"{MemoryHandler.mh.oreCount}";
             insertPort.text = $"{LanConnector.PORT}";
 
         }
@@ -62,11 +65,7 @@ public class MainMenu : MonoBehaviour
         bool tstCnn = MemoryHandler.mh.HostGame(
                 new IPEndPoint(IPAddress.Any,port));
         if(!tstCnn)return;
-        if(!int.TryParse(insertPlayerCount.text, NumberStyles.None, NumberFormatInfo.CurrentInfo, out MemoryHandler.mh.maxPlCnt)){
-            //MemoryHandler.mh.maxPlCnt
-            MemoryHandler.mh.maxPlCnt = 1;
-        }
-        MemoryHandler.mh.maxPlCnt--;
+        FetchRawNumbers();
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
         MemoryHandler.mh.StartBoradCasting(insertName.text);
     }
@@ -96,5 +95,20 @@ public class MainMenu : MonoBehaviour
             return;
         }
         MemoryHandler.mh.SetActiveScene(MemoryHandler.scGame);
+    }
+    public void FetchRawNumbers(){
+        if(!int.TryParse(insertPlayerCount.text, out MemoryHandler.mh.maxPlCnt)){
+            //MemoryHandler.mh.maxPlCnt
+            MemoryHandler.mh.maxPlCnt = 1;
+        }
+        MemoryHandler.mh.maxPlCnt--;
+        if(!int.TryParse(insertOreCount.text, out MemoryHandler.mh.oreCount)){
+            //MemoryHandler.mh.maxPlCnt
+            MemoryHandler.mh.oreCount = 8;
+        }
+        if(!float.TryParse(insertBaseRadius.text, out MemoryHandler.mh.baseRadius)){
+            //MemoryHandler.mh.maxPlCnt
+            MemoryHandler.mh.baseRadius = 48;
+        }
     }
 }

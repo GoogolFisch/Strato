@@ -9,6 +9,7 @@ public class EntityManager : MonoBehaviour
     public float baseRadius = 2;
     public BaseEntity homeBase;
     public BaseEntity turretEntity;
+    public BaseEntity oreEntity;
     public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
     public static EntityManager em;
     public bool HasStarted = false;
@@ -19,6 +20,8 @@ public class EntityManager : MonoBehaviour
     void Awake()
     {
         em = this;
+        if(MemoryHandler.mh != null)
+            baseRadius = MemoryHandler.mh.baseRadius;
     }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,6 +30,18 @@ public class EntityManager : MonoBehaviour
 
     }
 
+    public void RandSummonOre(){
+        float x,y;
+        float br = baseRadius * 1.1f;
+        do{
+            x = UnityEngine.Random.Range(-br,br);
+            y = UnityEngine.Random.Range(-br,br);
+        }while(x * x + y * y > br * br);
+        BaseEntity mObj = Instantiate(oreEntity,new Vector3(x,0,y),
+                Quaternion.identity,transform);
+
+
+    }
     public void SummonHomes(){
         if(HasStarted)return;
         HasStarted = true;
@@ -45,6 +60,8 @@ public class EntityManager : MonoBehaviour
             be = Instantiate(turretEntity,vpos * 0.9f,Quaternion.identity,transform);
             be.playerOwner = team;
         }
+        for(int i = 0;i < MemoryHandler.mh.oreCount;i++)
+            RandSummonOre();
     }
     public void Summon(SummonEntityPacket sep){
         //Debug.Log($"type:{sep.entityType}");
