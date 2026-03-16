@@ -124,6 +124,7 @@ public class MovingEntity : BaseEntity
         return mep;
     }
     override public void OnKill(BaseEntity be){
+        Debug.Log($"Delete {this}");
         UPSDeath.upsdeath.PlayAnimation(transform.position,transform.parent);
         base.OnKill(be);
     }

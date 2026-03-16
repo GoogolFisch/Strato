@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class HomeEntity : BaseEntity
 {
@@ -9,11 +10,15 @@ public class HomeEntity : BaseEntity
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
     {
+
+        bool doSkip = EntityManager.em.enityList.ContainsKey(id);
         transform.LookAt(Vector3.zero);
         base.Start();
-        if(playerOwner == GameManager.gm.currentTeam)return;
+        Debug.Log(id);
+        if(doSkip)return;
+        /*if(playerOwner == GameManager.gm.currentTeam)return;
         SummonEntityPacket mep = new SummonEntityPacket(this);
-        MemoryHandler.mh.shan.AddPacket(mep);
+        MemoryHandler.mh.shan.AddPacket(mep);*/
     }
 
     // Update is called once per frame
@@ -42,7 +47,30 @@ public class HomeEntity : BaseEntity
         MemoryHandler.mh.shan.AddPacket(mep);
         return true;
     }
+    bool NoDuplicate(){
+        List<BaseEntity> lbe = EntityManager.em.getCircleEntity(transform.position,0.1f);
+        int count = 0;
+        bool lowId = true;
+        for(int i = 0;i < lbe.Count;i++){
+            HomeEntity he = lbe[i] as HomeEntity;
+            if(he == null)continue;
+            if(he.playerOwner != this.playerOwner)continue;
+            count++;
+            lowId &= (id <= he.id);
+        }
+        if(count > 1 && !lowId){
+            EntityManager.em.enityList.Remove(id);
+            Destroy(gameObject);
+            return true;
+        }
+        return false;
+    }
     new void FixedUpdate(){
+        if(health < 0){
+            EntityManager.em.enityList.Remove(id);
+            Destroy(gameObject);
+            return;
+        }
         base.FixedUpdate();
         if(tick < tickDelta)return;
         tick = 0;
@@ -60,21 +88,26 @@ public class HomeEntity : BaseEntity
         MemoryHandler.mh.shan.AddPacket(mep);
     }
     override public void OnKill(BaseEntity be){
+        int oldOwner = playerOwner;
         if(GameManager.gm.currentTeam == be.playerOwner){
-            HomeEntity nHe = Instantiate(this,transform.position,
+            BaseEntity nBe = Instantiate(EntityManager.em.homeBase,transform.position,
                         transform.rotation,transform.parent);
+            HomeEntity nHe = nBe as HomeEntity;
+            if(nHe == null)return; // should never run!
             nHe.baseHealth = baseHealth / 2;
             nHe.playerOwner = be.playerOwner;
             nHe.tickDelta = (int)(nHe.tickDelta * 1.5f);
             Debug.Log(nHe.playerOwner);
         }
-        int oldOwner = playerOwner;
         //SetColor(GameManager.gm.GetMaterialFor(playerOwner));
         base.OnKill(be);
         TestSetLayer();
         Debug.Log("HomeEntity change player");
         EntityManager.em.HaveLost(oldOwner);
         EntityManager.em.HaveWon(be.playerOwner);
+
+        EntityManager.em.enityList.Remove(id);
+        Destroy(gameObject);
     }
     new public Packet SendStatus(){
         HomeEntityPacket mep = new HomeEntityPacket(this);

@@ -13,9 +13,9 @@ public class TowerEntity : BaseEntity
     {
         transform.LookAt(Vector3.zero);
         base.Start();
-        if(playerOwner == GameManager.gm.currentTeam)return;
+        /*if(playerOwner == GameManager.gm.currentTeam)return;
         SummonEntityPacket mep = new SummonEntityPacket(this);
-        MemoryHandler.mh.shan.AddPacket(mep);
+        MemoryHandler.mh.shan.AddPacket(mep);*/
     }
 
     // Update is called once per frame

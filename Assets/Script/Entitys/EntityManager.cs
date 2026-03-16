@@ -50,6 +50,7 @@ public class EntityManager : MonoBehaviour
         int playerCount = MemoryHandler.mh.maxPlCnt + 1;
         for(int i = 0;i < playerCount; i++)
         {
+            SummonEntityPacket mep;
             int team;
             if(i == 0)team = 0;
             else team = MemoryHandler.mh.shan.clCons[i - 1].gameTeam;
@@ -58,8 +59,16 @@ public class EntityManager : MonoBehaviour
             vpos *= baseRadius;
             BaseEntity be = Instantiate(homeBase,vpos,Quaternion.identity,transform);
             be.playerOwner = team;
+            if(team != GameManager.gm.currentTeam){
+                mep = new SummonEntityPacket(be);
+                MemoryHandler.mh.shan.AddPacket(mep);
+            }
             be = Instantiate(turretEntity,vpos * 0.9f,Quaternion.identity,transform);
             be.playerOwner = team;
+            if(team != GameManager.gm.currentTeam){
+                mep = new SummonEntityPacket(be);
+                MemoryHandler.mh.shan.AddPacket(mep);
+            }
         }
         for(int i = 0;i < MemoryHandler.mh.oreCount;i++)
             RandSummonOre();
@@ -75,6 +84,7 @@ public class EntityManager : MonoBehaviour
         // typeof(Derived).IsSubclassOf(typeof(SomeType))
         // typeof(SomeType).IsAssignableFrom(typeof(Derived))
         if(sep.subPack is BaseEntityPacket){
+            //sep.ActUppon();
             HandelPacket(sep);
         }
     }

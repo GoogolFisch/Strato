@@ -100,8 +100,11 @@ public class BaseEntity : MonoBehaviour
         health -= i;
         if(health < 0){
             if(attackee != null){
-                if(MemoryHandler.mh.shan.clCons != null && i < 9999){
-                    AttackingPacket atp = new AttackingPacket(attackee,this,99999);
+                if(MemoryHandler.mh.shan.clCons != null &&
+                        i < AttackingPacket.KILL_AMMOUNT){
+
+                    AttackingPacket atp = new AttackingPacket(
+                            attackee,this,AttackingPacket.KILL_AMMOUNT);
                     atp.ActUppon();
                     MemoryHandler.mh.shan.AddPacket(atp);
                 }
@@ -114,6 +117,7 @@ public class BaseEntity : MonoBehaviour
     virtual public void OnKill(BaseEntity attackee){
         EntityManager.em.enityList.Remove(id);
         Destroy(gameObject);
+        Debug.Log($"Killing {this}");
     }
 
     // Update is called once per frame
