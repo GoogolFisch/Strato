@@ -47,30 +47,13 @@ public class HomeEntity : BaseEntity
         MemoryHandler.mh.shan.AddPacket(mep);
         return true;
     }
-    bool NoDuplicate(){
-        List<BaseEntity> lbe = EntityManager.em.getCircleEntity(transform.position,0.1f);
-        int count = 0;
-        bool lowId = true;
-        for(int i = 0;i < lbe.Count;i++){
-            HomeEntity he = lbe[i] as HomeEntity;
-            if(he == null)continue;
-            if(he.playerOwner != this.playerOwner)continue;
-            count++;
-            lowId &= (id <= he.id);
-        }
-        if(count > 1 && !lowId){
-            EntityManager.em.enityList.Remove(id);
-            Destroy(gameObject);
-            return true;
-        }
-        return false;
-    }
     new void FixedUpdate(){
-        if(health < 0){
+        if(health < -20){
             EntityManager.em.enityList.Remove(id);
+            Debug.Log("Destroy cause of health");
             Destroy(gameObject);
             return;
-        }
+        } // */
         base.FixedUpdate();
         if(tick < tickDelta)return;
         tick = 0;
