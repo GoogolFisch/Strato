@@ -50,11 +50,10 @@ MonoBehaviour:
   baseHealth: 200
   playerOwner: 0
   tick: 0
-  targetEnt: {fileID: 0}
-  radius: 1
   tickDelta: 501
   lastCreate: {fileID: 0}
-  spawnEntity: {fileID: 8314566212481155323, guid: 12e0ac85e0f64eada89e01677ae335c3, type: 3}
+  spawnEntity: {fileID: 1780306902888004810, guid: 12e0ac85e0f64eada89e01677ae335c3, type: 3}
+  carEnt: {fileID: 5905119555982614623, guid: 7ec76f79f1c9cd0faaf803fb644f9d0e, type: 3}
 --- !u!1001 &6279163168901192225
 PrefabInstance:
   m_ObjectHideFlags: 0

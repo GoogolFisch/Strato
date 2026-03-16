@@ -13,7 +13,7 @@ public class Minable : BaseEntity
     }
 
     override public void OnKill(BaseEntity be){
-        if(GameManager.gm.currentTeam == be.playerOwner){
+        if(GameManager.gm.currentTeam == 0){
             BaseEntity nbe = Instantiate(EntityManager.em.homeBase,transform.position,
                         transform.rotation,transform.parent);
             nbe.playerOwner = be.playerOwner;

@@ -28,6 +28,7 @@ public class Packet
         possible[(int)PacketTypes.ChatPacket] = typeof(ChatPacket);
         possible[(int)PacketTypes.BaseEntityPacket] = typeof(BaseEntityPacket);
         possible[(int)PacketTypes.MovingEntityPacket] = typeof(MovingEntOrder);
+        possible[(int)PacketTypes.HomeEntityPacket] = typeof(HomeEntityPacket);
         possible[(int)PacketTypes.SummonEntityPacket] = typeof(SummonEntityPacket);
         possible[(int)PacketTypes.AttackingPacket] = typeof(AttackingPacket);
 

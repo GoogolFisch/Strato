@@ -13,14 +13,14 @@ public class MovingEntity : BaseEntity
     public Vector3 moveVector;
     public Vector3 redirectVel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    new void Start()
+    new internal void Start()
     {
         base.Start();
         moveVector = Vector3.zero;
     }
 
     // Update is called once per frame
-    new void Update()
+    new internal void Update()
     {
         base.Update();
         float mag = moveVector.magnitude;
@@ -45,8 +45,9 @@ public class MovingEntity : BaseEntity
         // this would remove the wired ending behaviour
         if(followEnt != null)
         {
-            if(followEnt.GetType() == typeof(MovingEntity)){
-                Vector3 preMove = ((MovingEntity)followEnt).moveVector;
+            MovingEntity fment = followEnt as MovingEntity;
+            if(fment != null){
+                Vector3 preMove = fment.moveVector;
                 preMove.Normalize();
                 moveVector += preMove;
             }
@@ -80,7 +81,7 @@ public class MovingEntity : BaseEntity
         foreach(BaseEntity be in bes)
         {
             if(be == this)continue;
-            if((be as MovingEntity) == null)continue;
+            if(be is not MovingEntity)continue;
             away = transform.position - be.transform.position;
             mag = away.magnitude;
             colMag = mag / colRadius;
@@ -98,34 +99,15 @@ public class MovingEntity : BaseEntity
         if(attingP != null)
             MemoryHandler.mh.shan.AddPacket(attingP);
     }
-    public AttackingPacket TryAttack(List<BaseEntity> bes){
-        float minDist = 99;
-        BaseEntity attacking = null;
-        foreach(BaseEntity be in bes)
-        {
-            if(be == this)continue;
-            if(be.playerOwner == playerOwner)continue;
-            Vector3 dif = be.transform.position - transform.position;
-            float dstSq = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
-            if(dstSq < minDist)
-            {
-                minDist = dstSq;
-                attacking = be;
-            }
-        }
-        if(attacking == null)return null;
-        //Debug.Log($"attacking {attacking} at {minDist} : {attacking.health} - {attackDamage}");
-        AttackingPacket atingP = new AttackingPacket(this,attacking,attackDamage);
-        MemoryHandler.mh.shan.AddPacket(SendStatus());
-        atingP.ActUppon(this,attacking);
-        return atingP;
+    public virtual AttackingPacket TryAttack(List<BaseEntity> bes){
+        return null;
     }
     public void FollowEnt(BaseEntity be)
     {
         followEnt = be;
-        if(be.GetType() == typeof(MovingEntity))
+        MovingEntity ment = be as MovingEntity;
+        if(ment != null)
         {
-            MovingEntity ment = (MovingEntity)be;
             if(ment.followEnt != null){
                 followEnt = ment.followEnt;
                 targetPos = ment.transform.position;

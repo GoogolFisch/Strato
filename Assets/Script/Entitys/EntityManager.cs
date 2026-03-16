@@ -10,6 +10,7 @@ public class EntityManager : MonoBehaviour
     public BaseEntity homeBase;
     public BaseEntity turretEntity;
     public BaseEntity oreEntity;
+    public CarEntity carEntity;
     public Dictionary<ulong, BaseEntity> enityList = new Dictionary<ulong, BaseEntity>();
     public static EntityManager em;
     public bool HasStarted = false;
@@ -17,7 +18,7 @@ public class EntityManager : MonoBehaviour
 
     [Header("Entity List")]
     public BaseEntity[] allEntitys;
-    void Awake()
+    internal void Awake()
     {
         em = this;
         if(MemoryHandler.mh != null)
@@ -73,7 +74,7 @@ public class EntityManager : MonoBehaviour
         
         // typeof(Derived).IsSubclassOf(typeof(SomeType))
         // typeof(SomeType).IsAssignableFrom(typeof(Derived))
-        if(sep.subPack.GetType().IsSubclassOf(typeof(BaseEntity))){
+        if(sep.subPack is BaseEntityPacket){
             HandelPacket(sep);
         }
     }
@@ -150,11 +151,12 @@ public class EntityManager : MonoBehaviour
         }
         if(gm != null)
         {
-            if((gm as MovingEntity) != null){
-                if(selectedEnt == ((MovingEntity)gm).followEnt){
+            MovingEntity ment = gm as MovingEntity;
+            if(ment != null){
+                if(selectedEnt == ment.followEnt){
                     selectedEnt = gm;
                 }else{
-                    selectedEnt = ((MovingEntity)gm).followEnt;
+                    selectedEnt = ment.followEnt;
                 }
                 if(selectedEnt == null){
                     selectedEnt = gm;
@@ -166,13 +168,13 @@ public class EntityManager : MonoBehaviour
             Instantiate(insertWithSelected,vpos,Quaternion.identity,selectedEnt.transform);
         }
     }
-    public void DoSelectObject2(BaseEntity gm)
+    public void DoSelectObject2(BaseEntity gm) // foe
     {
         if(selectedEnt == gm)return;
         if(gm == null)return;
-        if(selectedEnt.GetType() == typeof(MovingEntity))
+        MovingEntity ment = selectedEnt as MovingEntity;
+        if(ment != null)
         {
-            MovingEntity ment = (MovingEntity)selectedEnt;
             ment.FollowPos(gm.transform.position);
         }
         /*
@@ -183,14 +185,14 @@ public class EntityManager : MonoBehaviour
         }
         // */
     }
-    public void DoSelectObject3(BaseEntity gm)
+    public void DoSelectObject3(BaseEntity gm) // friend
     {
         if(selectedEnt == gm)return;
         if(gm == null)
             return;
-        if(selectedEnt.GetType() == typeof(MovingEntity))
+        MovingEntity ment = selectedEnt as MovingEntity;
+        if(ment != null)
         {
-            MovingEntity ment = (MovingEntity)selectedEnt;
             ment.FollowEnt(gm);
         }
     }
@@ -203,9 +205,9 @@ public class EntityManager : MonoBehaviour
             return;
         }
         if(hit.magnitude > baseRadius * 1.5f)return;
-        if(selectedEnt.GetType() == typeof(MovingEntity))
+        MovingEntity ment = selectedEnt as MovingEntity;
+        if(ment != null)
         {
-            MovingEntity ment = (MovingEntity)selectedEnt;
             ment.FollowPos(hit);
         }
     }

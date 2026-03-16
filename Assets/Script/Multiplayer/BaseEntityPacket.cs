@@ -7,6 +7,7 @@ public class BaseEntityPacket : Packet
 {
     public ulong entId;
     public float eHealth;
+    //public float bHealth;
     public Vector3 position;
     //public int ePlayerOwner;
     public int eTick;
@@ -16,6 +17,7 @@ public class BaseEntityPacket : Packet
         this.id = PacketTypes.BaseEntityPacket;
         entId = 0;
         eHealth = 0;
+        //bHealth = 0;
         //ePlayerOwner = -1;
         position = Vector3.zero;
         eTick = 0;
@@ -25,6 +27,7 @@ public class BaseEntityPacket : Packet
         this.id = PacketTypes.BaseEntityPacket;
         entId = me.id;
         eHealth = me.health;
+        //bHealth = me.baseHealth;
         //ePlayerOwner = me.playerOwner;
         position = me.transform.position;
         eTick = me.tick;
@@ -36,6 +39,7 @@ public class BaseEntityPacket : Packet
         outp.AddRange(base.PacketData());
         outp.AddRange(BitConverter.GetBytes(entId));
         outp.AddRange(BitConverter.GetBytes(eHealth));
+        //outp.AddRange(BitConverter.GetBytes(bHealth));
         //outp.AddRange(BitConverter.GetBytes(ePlayerOwner));
         outp.AddRange(BitConverter.GetBytes(eTick));
         outp.AddRange(BitConverter.GetBytes(position.x));
@@ -55,6 +59,7 @@ public class BaseEntityPacket : Packet
         base.PopulatePacket(ref index,message,length);
         entId = BitConverter.ToUInt64(message,index);
         eHealth = BitConverter.ToSingle(message,index + 8);
+        //bHealth = BitConverter.ToSingle(message,index + 12);
         //ePlayerOwner = BitConverter.ToInt32(message,index + 12);
         eTick = BitConverter.ToInt32(message,index + 12);
         index += 16;
@@ -73,6 +78,7 @@ public class BaseEntityPacket : Packet
     public void ActUppon(BaseEntity beI){
         if(MemoryHandler.mh.shan.clCons == null)
             beI.health = eHealth;
+        //beI.baseHealth = bHealth;
         beI.transform.position = position;
         beI.tick = eTick;
     }

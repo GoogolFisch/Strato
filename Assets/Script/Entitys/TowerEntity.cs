@@ -38,6 +38,7 @@ public class TowerEntity : BaseEntity
         {
             if(be == this)continue;
             if(be.playerOwner == playerOwner)continue;
+            if(be is not MovingEntity)continue;
             Vector3 dif = be.transform.position - transform.position;
             float dstSq = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
             if(dstSq < minDist)

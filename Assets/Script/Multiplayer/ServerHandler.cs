@@ -76,7 +76,7 @@ public class ServerHandler : IDisposable
                 foreach(DirConnection dc2 in clCons){
                     if(dc2 == dc)continue;
                     dc2.AddOutgoingPacket(pck);
-                    /*if((pck as AttackingPacket) != null){
+                    /*if(!(pck is AttackingPacket)){
                         string log = $"resending {pck} from {dc} to {dc2}";
                         //Debug.Log(log);
                         //DeLogger.dl.Log(log);

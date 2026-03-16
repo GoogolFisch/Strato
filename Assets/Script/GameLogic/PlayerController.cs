@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
             Debug.Log($"att {selectedEnt}");
+            // Enemy
             EntityManager.em.DoSelectObject2(selectedEnt);
             return;
         }
@@ -161,6 +162,7 @@ public class PlayerController : MonoBehaviour
                     selectedEnt = _hit.transform.parent.parent.GetComponent<BaseEntity>();
             }
             Debug.Log($"sel {selectedEnt}");
+            // friend
             EntityManager.em.DoSelectObject3(selectedEnt);
             return;
         }
