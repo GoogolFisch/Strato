@@ -37,7 +37,7 @@ public class LanConnector : IDisposable
         barr.AddRange(Packet.ConvertFromString(str));
         List<DirConnection> ldc = MemoryHandler.mh.shan.clCons;
         if(ldc != null){
-            barr.AddRange(BitConverter.GetBytes(1 + MemoryHandler.mh.shan.clCons.Count));
+            barr.AddRange(BitConverter.GetBytes(1 + ldc.Count));
             barr.AddRange(BitConverter.GetBytes(1 + MemoryHandler.mh.maxPlCnt));
         }else{
             barr.AddRange(BitConverter.GetBytes(0));
@@ -116,6 +116,7 @@ public class LanConnector : IDisposable
         {
             //var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, _port);
             var ipEndPoint = new IPEndPoint(IPAddress.Loopback, _port);
+            var ipEndPointBrd = new IPEndPoint(IPAddress.Broadcast, _port);
             using (var senderSocket = new UdpClient(portService))
             {
                 senderSocket.EnableBroadcast = true;
@@ -123,10 +124,13 @@ public class LanConnector : IDisposable
 
                 while (_isBroadcasting)
                 {
+                    byte[] sesInfo;
+                    if(GameManager.gm != null)sesInfo = MakeSessionInfo(GameManager.gm.playerName);
+                    else sesInfo = sessionInformation;
                     if(DeLogger.dl != null)
                         DeLogger.dl.Log($"BRD {ipEndPoint}");
-                    senderSocket.Send(sessionInformation,
-                        sessionInformation.Length, ipEndPoint);
+                    senderSocket.Send(sesInfo,sesInfo.Length, ipEndPoint);
+                    senderSocket.Send(sesInfo,sesInfo.Length, ipEndPointBrd);
                     await Task.Delay(TimeSpan.FromSeconds(broadcastInterval));
                 }
             }
